@@ -7,6 +7,7 @@ import (
 	"github.com/moovweb/gokogiri"
 	"github.com/moovweb/gokogiri/xml"
 	"io/ioutil"
+	"os"
 )
 
 func xmlReadFile(filename string) (doc *xml.XmlDocument, err error) {
@@ -18,8 +19,18 @@ func xmlReadFile(filename string) (doc *xml.XmlDocument, err error) {
 	return
 }
 
+func usage() {
+	fmt.Fprintf(os.Stderr, "Usage: %s [options] STYLESHEET INPUT\n", os.Args[0])
+	flag.PrintDefaults()
+}
+
 func main() {
+	flag.Usage = usage
 	flag.Parse()
+	if flag.NArg() < 2 {
+		usage()
+		return
+	}
 	//set some prefs based on flags
 	xslfile := flag.Arg(0)
 	inxml := flag.Arg(1)
