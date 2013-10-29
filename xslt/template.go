@@ -100,6 +100,26 @@ func (i *Variable) Apply(node xml.Node, context *ExecutionContext) {
 	//fmt.Println("VARIABLE NODES", name, i.Value)
 }
 
+// Some instructions (such as xsl:attribute) require the template body
+// to be instantiated as a string.
+
+// In those cases, it is an error if any non-text nodes are generated in the
+// course of evaluation.
+func (i *XsltInstruction) evalChildrenAsText(node xml.Node, context *ExecutionContext) (out string, err error) {
+	curOutput := context.OutputNode
+	context.OutputNode = context.Output.CreateElementNode("RVT")
+	for _, c := range i.Children {
+		c.Apply(node, context)
+	}
+	for cur := context.OutputNode.FirstChild(); cur != nil; cur = cur.NextSibling() {
+		//TODO: generate error if cur is not a text node
+		out = out + cur.Content()
+	}
+	context.OutputNode = curOutput
+	return
+}
+
+// Evaluate an instruction and generate output nodes
 func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 	//push context if children to apply!
 	switch i.Name {
@@ -185,12 +205,15 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		context.OutputNode = old
 
 	case "comment":
-		r := context.Output.CreateCommentNode(i.Node.Content())
+		val, _ := i.evalChildrenAsText(node, context)
+		r := context.Output.CreateCommentNode(val)
 		context.OutputNode.AddChild(r)
 
 	case "processing-instruction":
 		name := i.Node.Attr("name")
-		r := context.Output.CreatePINode(name, i.Node.Content())
+		val, _ := i.evalChildrenAsText(node, context)
+		//TODO: it is an error if val contains "?>"
+		r := context.Output.CreatePINode(name, val)
 		context.OutputNode.AddChild(r)
 
 	case "attribute":
@@ -202,7 +225,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		if strings.ContainsRune(ahref, '{') {
 			ahref = evalAVT(ahref, node, context)
 		}
-		val := i.Node.Content()
+		val, _ := i.evalChildrenAsText(node, context)
 		if ahref == "" {
 			context.OutputNode.SetAttr(aname, val)
 		} else {
