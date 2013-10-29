@@ -25,6 +25,8 @@ func usage() {
 	flag.PrintDefaults()
 }
 
+var indent = flag.Bool("indent", false, "Attempt to indent any XML output")
+
 func main() {
 	flag.Usage = usage
 	flag.Parse()
@@ -56,7 +58,9 @@ func main() {
 		return
 	}
 
-	output, err := stylesheet.Process(doc)
+	options := xslt.StylesheetOptions{*indent, nil}
+
+	output, err := stylesheet.Process(doc, options)
 	if err != nil {
 		fmt.Println(err)
 		return

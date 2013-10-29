@@ -53,6 +53,13 @@ type ExecutionContext struct {
 	Mode         string       //The current template mode
 }
 
+// StylesheetOptions to control processing. Parameters values are passed into
+// the stylesheet via this structure.
+type StylesheetOptions struct {
+	IndentOutput bool                   //force the output to be indented
+	Parameters   map[string]interface{} //supply values for stylesheet parameters
+}
+
 // Returns true if the node is in the XSLT namespace
 func IsXsltName(xmlnode xml.Node, name string) bool {
 	if xmlnode.Name() == name && xmlnode.Namespace() == XSLT_NAMESPACE {
@@ -270,7 +277,7 @@ func (style *Stylesheet) IsExcluded(prefix string) bool {
 // The output is not guaranteed to be well-formed XML, so the
 // serialized string is returned. Consideration is being given
 // to returning a slice of bytes.
-func (style *Stylesheet) Process(doc *xml.XmlDocument) (out string, err error) {
+func (style *Stylesheet) Process(doc *xml.XmlDocument, options StylesheetOptions) (out string, err error) {
 	// lookup output method, doctypes, encoding
 	// create output document with appropriate values
 	output := xml.CreateEmptyDocument(doc.InputEncoding(), doc.OutputEncoding())
@@ -305,10 +312,17 @@ func (style *Stylesheet) Process(doc *xml.XmlDocument) (out string, err error) {
 		if !style.OmitXmlDeclaration {
 			out = "<?xml version=\"1.0\"?>\n"
 		}
-		// we get slightly incorrect output if we call out.ToUnformattedXml directly
+		format := xml.XML_SAVE_NO_DECL | xml.XML_SAVE_AS_XML
+		if options.IndentOutput {
+			format = format | xml.XML_SAVE_FORMAT
+		}
+		// we get slightly incorrect output if we call out.SerializeWithFormat directly
 		// this seems to be a libxml bug; we work around it the same way libxslt does
 		for cur := output.FirstChild(); cur != nil; cur = cur.NextSibling() {
-			out = out + cur.ToUnformattedXml()
+			b, size := cur.SerializeWithFormat(format, nil, nil)
+			if b != nil {
+				out = out + string(b[:size])
+			}
 		}
 		out = out + "\n"
 	}

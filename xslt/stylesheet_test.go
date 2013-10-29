@@ -26,8 +26,9 @@ func runXslTest(t *testing.T, xslFile, inputXmlFile, outputXmlFile string) bool 
 	input, _ := xmlReadFile(inputXmlFile)
 	outData, _ := ioutil.ReadFile(outputXmlFile)
 	expected := string(outData)
-	stylesheet := ParseStylesheet(style, xslFile)
-	output := stylesheet.Process(input)
+	stylesheet, _ := ParseStylesheet(style, xslFile)
+	testOptions := StylesheetOptions{false, nil}
+	output, _ := stylesheet.Process(input, testOptions)
 	if output != expected {
 		t.Error(xslFile, "failed")
 		fmt.Println("---- EXPECTED  ", xslFile, "----")
