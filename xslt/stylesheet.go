@@ -38,6 +38,7 @@ type Stylesheet struct {
 	Keys               map[string]*Key
 	OutputMethod       string //html, xml, text
 	OmitXmlDeclaration bool   //defaults to false
+	IndentOutput       bool   //defaults to false
 }
 
 // StylesheetOptions to control processing. Parameters values are passed into
@@ -211,6 +212,10 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 			if omit == "yes" {
 				style.OmitXmlDeclaration = true
 			}
+			indent := cur.Attr("indent")
+			if indent == "yes" {
+				style.IndentOutput = true
+			}
 			continue
 		}
 
@@ -300,7 +305,7 @@ func (style *Stylesheet) Process(doc *xml.XmlDocument, options StylesheetOptions
 			out = "<?xml version=\"1.0\"?>\n"
 		}
 		format := xml.XML_SAVE_NO_DECL | xml.XML_SAVE_AS_XML
-		if options.IndentOutput {
+		if options.IndentOutput || style.IndentOutput {
 			format = format | xml.XML_SAVE_FORMAT
 		}
 		// we get slightly incorrect output if we call out.SerializeWithFormat directly
