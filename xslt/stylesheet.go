@@ -345,6 +345,16 @@ func (style *Stylesheet) constructOutput(output *xml.XmlDocument, options Styles
 		b, size := output.ToHtml(nil, nil)
 		out = out + string(b[:size])
 	}
+	if outputType == "text" {
+		format := xml.XML_SAVE_NO_DECL
+		for cur := output.FirstChild(); cur != nil; cur = cur.NextSibling() {
+			b, size := cur.SerializeWithFormat(format, nil, nil)
+			if b != nil {
+				out = out + string(b[:size])
+			}
+		}
+		out = out + "\n"
+	}
 	return
 }
 
