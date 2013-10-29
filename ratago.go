@@ -1,3 +1,4 @@
+// The ratago command-line utility runs an input file through an XSLT stylesheet.
 package main
 
 import (
@@ -49,7 +50,17 @@ func main() {
 
 	//TODO: register some extensions (EXSLT, testing, debug)
 	//TODO: process XInclude if enabled
-	stylesheet := xslt.ParseStylesheet(style, xslfile)
-	output := stylesheet.Process(doc)
+	stylesheet, err := xslt.ParseStylesheet(style, xslfile)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	output, err := stylesheet.Process(doc)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	fmt.Println(output)
 }

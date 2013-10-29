@@ -74,7 +74,7 @@ func IsBlank(xmlnode xml.Node) bool {
 
 // ParseStylesheet compiles the stylesheet's XML representation
 // and returns a Stylesheet instance.
-func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet) {
+func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, err error) {
 	style = &Stylesheet{Doc: doc,
 		NamespaceMapping: make(map[string]string),
 		NamespaceAlias:   make(map[string]string),
@@ -202,7 +202,7 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet) {
 			style.includes[loc] = true
 			//increment import; new style context
 			doc, _ := xmlReadFile(loc)
-			_import := ParseStylesheet(doc, loc)
+			_import, _ := ParseStylesheet(doc, loc)
 			style.Imports.PushFront(_import)
 			continue
 		}
@@ -242,7 +242,6 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet) {
 			style.NamespaceAlias[stylens] = resns
 			continue
 		}
-		//key
 		//decimal-format
 		fmt.Println("GLOBAL SS TODO ", cur.Name())
 	}
@@ -250,7 +249,7 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet) {
 	//flag non-empty text nodes, non XSL-namespaced nodes
 	//  actually registered extension namspaces are good!
 	//all other types
-	//  include, output,key,decimal-format
+	//  decimal-format
 	//warn unknown XSLT element (forwards-compatible mode)
 
 	return
@@ -271,7 +270,7 @@ func (style *Stylesheet) IsExcluded(prefix string) bool {
 // The output is not guaranteed to be well-formed XML, so the
 // serialized string is returned. Consideration is being given
 // to returning a slice of bytes.
-func (style *Stylesheet) Process(doc *xml.XmlDocument) (out string) {
+func (style *Stylesheet) Process(doc *xml.XmlDocument) (out string, err error) {
 	// lookup output method, doctypes, encoding
 	// create output document with appropriate values
 	output := xml.CreateEmptyDocument(doc.InputEncoding(), doc.OutputEncoding())
