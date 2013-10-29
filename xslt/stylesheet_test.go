@@ -8,12 +8,8 @@ import (
 	"testing"
 )
 
+// Simple naive test; primarily exists as a canary in case test helpers break
 func TestNaive(t *testing.T) {
-	//proper way to do this:
-	// foreach test
-	// load input, stylesheet
-	// process
-	// compare to output
 	xslFile := "testdata/test.xsl"
 	inputXml := "testdata/test.xml"
 	outputXml := "testdata/test.out"
@@ -56,6 +52,7 @@ func exists(path string) (bool, error) {
 	return false, err
 }
 
+// Runs the tests derived from the XSLT 1.0 specification examples
 func TestXsltREC(t *testing.T) {
 	var passed []string
 	d, _ := os.Open("testdata/REC")
@@ -82,4 +79,13 @@ func TestXsltREC(t *testing.T) {
 	//	fmt.Println("PASSED", p)
 	//}
 	fmt.Println("passed", len(passed), "tests")
+}
+
+// Tests the first full example presented in the XSLT 1.0 spec
+func TestXsltRECexample1(t *testing.T) {
+	xslFile := "testdata/REC1/doc.xsl"
+	inputXml := "testdata/REC1/doc.xml"
+	outputXml := "testdata/REC1/result.xml"
+
+	runXslTest(t, xslFile, inputXml, outputXml)
 }

@@ -37,6 +37,7 @@ type Stylesheet struct {
 	includes           map[string]bool
 	Keys               map[string]*Key
 	OutputMethod       string //html, xml, text
+	DesiredEncoding    string //encoding specified by xsl:output
 	OmitXmlDeclaration bool   //defaults to false
 	IndentOutput       bool   //defaults to false
 }
@@ -216,6 +217,12 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 			if indent == "yes" {
 				style.IndentOutput = true
 			}
+			encoding := cur.Attr("encoding")
+			if encoding != "" && encoding != "UTF-8" && encoding != "utf-8" {
+				//TODO: emit a warning if we do not support the encoding
+				// if unsupported, leave blank to output default UTF-8
+				style.DesiredEncoding = encoding
+			}
 			continue
 		}
 
@@ -288,8 +295,13 @@ func (style *Stylesheet) Process(doc *xml.XmlDocument, options StylesheetOptions
 	// process nodes
 	style.processNode(start, context)
 
-	// construct DTD, xml declarations depending on xsl:output settings
+	out, err = style.constructOutput(output, options)
+	// reset anything required for re-use
+	return
+}
 
+// actually produce (and possibly write) the final output
+func (style *Stylesheet) constructOutput(output *xml.XmlDocument, options StylesheetOptions) (out string, err error) {
 	//if not explicitly set, spec requires us to check for html
 	outputType := style.OutputMethod
 	if outputType == "" {
@@ -300,9 +312,16 @@ func (style *Stylesheet) Process(doc *xml.XmlDocument, options StylesheetOptions
 		}
 	}
 
+	// TODO: construct DTD declaration depending on xsl:output settings
+
+	// create the XML declaration depending on xsl:output settings
 	if outputType == "xml" {
 		if !style.OmitXmlDeclaration {
-			out = "<?xml version=\"1.0\"?>\n"
+			out = "<?xml version=\"1.0\""
+			if style.DesiredEncoding != "" {
+				out = out + fmt.Sprintf(" encoding=\"%s\"", style.DesiredEncoding)
+			}
+			out = out + "?>\n"
 		}
 		format := xml.XML_SAVE_NO_DECL | xml.XML_SAVE_AS_XML
 		if options.IndentOutput || style.IndentOutput {
@@ -310,6 +329,10 @@ func (style *Stylesheet) Process(doc *xml.XmlDocument, options StylesheetOptions
 		}
 		// we get slightly incorrect output if we call out.SerializeWithFormat directly
 		// this seems to be a libxml bug; we work around it the same way libxslt does
+
+		//TODO: honor desired encoding
+		//  this involves decisions about supported encodings, strings vs byte slices
+		//  we can sidestep a little if we enable option to write directly to file
 		for cur := output.FirstChild(); cur != nil; cur = cur.NextSibling() {
 			b, size := cur.SerializeWithFormat(format, nil, nil)
 			if b != nil {
@@ -322,7 +345,6 @@ func (style *Stylesheet) Process(doc *xml.XmlDocument, options StylesheetOptions
 		b, size := output.ToHtml(nil, nil)
 		out = out + string(b[:size])
 	}
-	// reset anything required for re-use
 	return
 }
 
