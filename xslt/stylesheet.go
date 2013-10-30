@@ -359,7 +359,6 @@ func (style *Stylesheet) constructOutput(output *xml.XmlDocument, options Styles
 				out = out + string(b[:size])
 			}
 		}
-		out = out + "\n"
 	}
 	return
 }
