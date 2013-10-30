@@ -139,6 +139,12 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 		if IsBlank(cur) {
 			continue
 		}
+
+		//skip comment nodes
+		if cur.NodeType() == xml.XML_COMMENT_NODE {
+			continue
+		}
+
 		//handle templates
 		if IsXsltName(cur, "template") {
 			style.ParseTemplate(cur)
