@@ -89,3 +89,12 @@ func TestXsltRECexample1(t *testing.T) {
 
 	runXslTest(t, xslFile, inputXml, outputXml)
 }
+
+// Tests the first full example presented in the XSLT 1.0 spec
+func TestXsltRECexample2(t *testing.T) {
+	inputXml := "testdata/REC2/data.xml"
+
+	runXslTest(t, "testdata/REC2/html.xsl", inputXml, "testdata/REC2/html.xml")
+	runXslTest(t, "testdata/REC2/svg.xsl", inputXml, "testdata/REC2/svg.xml")
+	runXslTest(t, "testdata/REC2/vrml.xsl", inputXml, "testdata/REC2/vrml.xml")
+}

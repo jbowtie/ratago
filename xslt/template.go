@@ -38,6 +38,7 @@ type TextOutput struct {
 }
 
 type Variable struct {
+	Name     string
 	Node     xml.Node
 	Children []CompiledStep
 	Value    interface{}
@@ -58,6 +59,7 @@ func (i *XsltInstruction) Compile(node xml.Node) {
 }
 
 func (i *Variable) Compile(node xml.Node) {
+	i.Name = i.Node.Attr("name")
 	for cur := node.FirstChild(); cur != nil; cur = cur.NextSibling() {
 		res := CompileSingleNode(cur)
 		if res != nil {
@@ -68,7 +70,6 @@ func (i *Variable) Compile(node xml.Node) {
 }
 
 func (i *Variable) Apply(node xml.Node, context *ExecutionContext) {
-	//name := i.Node.Attr("name")
 	scope := i.Node.Attr("select")
 	// if @select
 	if scope != "" {
@@ -91,7 +92,7 @@ func (i *Variable) Apply(node xml.Node, context *ExecutionContext) {
 		c.Apply(node, context)
 	}
 	i.Value = nil
-	var outNodes []xml.Node
+	var outNodes xml.Nodeset
 	for cur := context.OutputNode.FirstChild(); cur != nil; cur = cur.NextSibling() {
 		outNodes = append(outNodes, cur)
 	}
@@ -363,10 +364,16 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		}
 		total := len(nodes)
 		for j, cur := range nodes {
+			context.PushStack()
 			context.XPathContext.SetContextPosition(j+1, total)
 			for _, c := range i.Children {
 				c.Apply(cur, context)
+				switch v := c.(type) {
+				case *Variable:
+					_ = context.DeclareLocalVariable(v.Name, "", v)
+				}
 			}
+			context.PopStack()
 		}
 	case "copy-of":
 		i.copyToOutput(node, context, true)
@@ -650,6 +657,7 @@ func (e *LiteralResultElement) Apply(node xml.Node, context *ExecutionContext) {
 	context.OutputNode = old
 }
 
+// Evaluate an attribute value template
 func evalAVT(input string, node xml.Node, context *ExecutionContext) (out string) {
 	var start, pos int
 	var inSQlit, inDQlit bool
@@ -681,6 +689,8 @@ func evalAVT(input string, node xml.Node, context *ExecutionContext) (out string
 				for _, n := range val {
 					out = out + n.Content()
 				}
+			case float64:
+				out = out + fmt.Sprintf("%v", val)
 			case string:
 				out = out + val
 			}
@@ -749,28 +759,20 @@ func CompileSingleNode(node xml.Node) (step CompiledStep) {
 
 func (template *Template) Apply(node xml.Node, context *ExecutionContext) {
 	//init local scope
+	context.PushStack()
 	//populate any params (including those passed via with-params)
 	for _, c := range template.Children {
 		c.Apply(node, context)
+		switch v := c.(type) {
+		case *Variable:
+			_ = context.DeclareLocalVariable(v.Name, "", v)
+		}
 	}
-
+	context.PopStack()
 	//apply sequence ctr
 	//for each node in compiled template body
 	// if xsl:message
-	// if literal result element - copy to output
-	//   add effective namespace declarations not already in scope
-	//   process attributes of literal element
 	// if forwards-compatible
 	//   apply fallback
-	// if xsl instruction
-	//   process with current context
-	// if xsl variable
-	//   eval
-	// if extension
-	//   resolve if needed
-	//   execute (or attempt fallback)
-	// if text node
-	//   copy
-	// recurse into children of current template node
 	// break out of loop if terminated by xsl:message
 }

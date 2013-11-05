@@ -1,6 +1,7 @@
 package xslt
 
 import (
+	"container/list"
 	"errors"
 	"github.com/moovweb/gokogiri/xml"
 	"github.com/moovweb/gokogiri/xpath"
@@ -16,6 +17,7 @@ type ExecutionContext struct {
 	Current      xml.Node     // The current input node
 	XPathContext *xpath.XPath //the XPath context
 	Mode         string       //The current template mode
+	Stack        list.List
 }
 
 func (context *ExecutionContext) EvalXPath(xmlNode xml.Node, data interface{}) (result interface{}, err error) {
@@ -38,7 +40,7 @@ func (context *ExecutionContext) EvalXPath(xmlNode xml.Node, data interface{}) (
 		}
 		rt := xpathCtx.ReturnType()
 		switch rt {
-		case xpath.XPATH_NODESET:
+		case xpath.XPATH_NODESET, xpath.XPATH_XSLT_TREE:
 			nodePtrs, err := xpathCtx.ResultAsNodeset()
 			if err != nil {
 				return nil, err
@@ -61,7 +63,7 @@ func (context *ExecutionContext) EvalXPath(xmlNode xml.Node, data interface{}) (
 	return
 }
 
-func (context *ExecutionContext) EvalXPathAsNodeset(xmlNode xml.Node, data interface{}) (result []xml.Node, err error) {
+func (context *ExecutionContext) EvalXPathAsNodeset(xmlNode xml.Node, data interface{}) (result xml.Nodeset, err error) {
 	_, err = context.EvalXPath(xmlNode, data)
 	if err != nil {
 		return nil, err
@@ -70,7 +72,7 @@ func (context *ExecutionContext) EvalXPathAsNodeset(xmlNode xml.Node, data inter
 	if err != nil {
 		return nil, err
 	}
-	var output []xml.Node
+	var output xml.Nodeset
 	for _, nodePtr := range nodePtrs {
 		output = append(output, xml.NewNode(nodePtr, xmlNode.MyDocument()))
 	}
@@ -152,28 +154,74 @@ func (context *ExecutionContext) UseCDataSection(node xml.Node) bool {
 }
 
 func (context *ExecutionContext) ResolveVariable(name, ns string) (ret interface{}) {
-	//consult local vars
-	//consult local params
-	//consult global vars (ss)
-	//consult global params (ss)
-	v, ok := context.Style.Variables[name]
-	if !ok {
-		return
-	}
+	v := context.FindVariable(name, ns)
+
 	if v == nil {
 		return
 	}
 
 	switch val := v.Value.(type) {
-	case []xml.Node:
-		var res []unsafe.Pointer
-		for _, n := range val {
-			res = append(res, n.NodePtr())
-		}
-		return res
+	case xml.Nodeset:
+		/*scope := v.Node.Attr("select")
+		if scope == "" {
+			return unsafe.Pointer(val.ToXPathValueTree())
+		}*/
+		return unsafe.Pointer(val.ToXPathNodeset())
+		//return val.ToPointers()
 	default:
 		return val
 	}
+}
+
+func (context *ExecutionContext) FindVariable(name, ns string) (ret *Variable) {
+	//consult local vars
+	//consult local params
+	v := context.LookupLocalVariable(name, ns)
+	if v != nil {
+		return v
+	}
+	//consult global vars (ss)
+	//consult global params (ss)
+	v, ok := context.Style.Variables[name]
+	if ok {
+		return v
+	}
+	return nil
+}
+
+func (context *ExecutionContext) DeclareLocalVariable(name, ns string, v *Variable) error {
+	if context.Stack.Len() == 0 {
+		return errors.New("Attempting to declare a local variable without a stack frame")
+	}
+	e := context.Stack.Front()
+	scope := e.Value.(map[string]*Variable)
+	scope[name] = v
+	return nil
+}
+
+func (context *ExecutionContext) LookupLocalVariable(name, ns string) (ret *Variable) {
+	for e := context.Stack.Front(); e != nil; e = e.Next() {
+		scope := e.Value.(map[string]*Variable)
+		v, ok := scope[name]
+		if ok {
+			return v
+		}
+	}
+	return
+}
+
+// create a local scope for variable resolution
+func (context *ExecutionContext) PushStack() {
+	scope := make(map[string]*Variable)
+	context.Stack.PushFront(scope)
+}
+
+// leave the variable scope
+func (context *ExecutionContext) PopStack() {
+	if context.Stack.Len() == 0 {
+		return
+	}
+	context.Stack.Remove(context.Stack.Front())
 }
 
 func (context *ExecutionContext) IsFunctionRegistered(name, ns string) bool {
