@@ -10,6 +10,7 @@ import (
 func (style *Stylesheet) RegisterXsltFunctions() {
 	style.Functions["key"] = XsltKey
 	style.Functions["system-property"] = XsltSystemProperty
+	style.Functions["document"] = XsltDocumentFn
 	//element-available
 	//function-available
 	//document
@@ -79,9 +80,26 @@ func XsltSystemProperty(context xpath.VariableScope, args []interface{}) interfa
 	case "xsl:vendor":
 		return "John C Barstow"
 	case "xsl:vendor-url":
-		return "http://github.com/jbowtie"
+		return "http://github.com/jbowtie/ratago"
 	default:
 		fmt.Println("EXEC system-property", args[0])
+	}
+	return nil
+}
+
+//Implementation of document() from XSLT spec
+func XsltDocumentFn(context xpath.VariableScope, args []interface{}) interface{} {
+	if len(args) < 1 {
+		return nil
+	}
+	c := context.(*ExecutionContext)
+
+	switch doc := args[0].(type) {
+	case string:
+		if doc == "" {
+			return []xml.Node{c.Style.Doc}
+		}
+		return nil
 	}
 	return nil
 }
