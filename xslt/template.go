@@ -185,6 +185,13 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			// not just top-level stylesheet mappings
 			prefix, _ := context.Style.NamespaceMapping[ns]
 			r.SetNamespace(prefix, ns)
+		} else {
+			// if no namespace specified, use the default namespace
+			// in scope at this point in the stylesheet
+			defaultNS := context.DefaultNamespace(i.Node)
+			if defaultNS != "" {
+				r.SetNamespace("", defaultNS)
+			}
 		}
 		context.OutputNode.AddChild(r)
 		old := context.OutputNode

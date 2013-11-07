@@ -236,3 +236,16 @@ func (context *ExecutionContext) ResolveFunction(name, ns string) xpath.XPathFun
 	}
 	return nil
 }
+
+// Determine the default namespace currently defined in scope
+func (context *ExecutionContext) DefaultNamespace(node xml.Node) string {
+	//get the list of in-scope namespaces
+	// any with a null prefix? return that
+	decl := node.DeclaredNamespaces()
+	for _, d := range decl {
+		if d.Prefix == "" {
+			return d.Uri
+		}
+	}
+	return ""
+}
