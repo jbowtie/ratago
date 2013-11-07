@@ -356,7 +356,8 @@ func (m *CompiledMatch) EvalMatch(node xml.Node, mode string, context *Execution
 				return false
 			}
 		case OP_NS:
-			if step.Value != cur.Namespace() {
+			uri := context.LookupNamespace(step.Value)
+			if uri != cur.Namespace() {
 				return false
 			}
 		case OP_ATTR:

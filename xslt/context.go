@@ -63,6 +63,24 @@ func (context *ExecutionContext) EvalXPath(xmlNode xml.Node, data interface{}) (
 	return
 }
 
+//TODO: walk up tree to get all namespaces in scope
+// libxml probably already makes this info available
+func (context *ExecutionContext) RegisterNamespaces(node xml.Node) (err error) {
+	for _, decl := range node.DeclaredNamespaces() {
+		context.XPathContext.RegisterNamespace(decl.Prefix, decl.Uri)
+	}
+	return
+}
+
+func (context *ExecutionContext) LookupNamespace(prefix string) (uri string) {
+	for href, pre := range context.Style.NamespaceMapping {
+		if pre == prefix {
+			return href
+		}
+	}
+	return
+}
+
 func (context *ExecutionContext) EvalXPathAsNodeset(xmlNode xml.Node, data interface{}) (result xml.Nodeset, err error) {
 	_, err = context.EvalXPath(xmlNode, data)
 	if err != nil {
