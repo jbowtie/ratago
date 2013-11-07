@@ -254,14 +254,15 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 			style.NamespaceAlias[stylens] = resns
 			continue
 		}
-		//decimal-format
-		fmt.Println("GLOBAL SS TODO ", cur.Name())
+
+		if IsXsltName(cur, "decimal-format") {
+			fmt.Println("GLOBAL TODO ", cur.Name())
+			continue
+		}
 	}
 	//xsl:import (must be first)
 	//flag non-empty text nodes, non XSL-namespaced nodes
 	//  actually registered extension namspaces are good!
-	//all other types
-	//  decimal-format
 	//warn unknown XSLT element (forwards-compatible mode)
 
 	return
