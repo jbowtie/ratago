@@ -617,3 +617,19 @@ func insertByPriority(l *list.List, match *CompiledMatch) {
 	//either list is empty, or we're lowest priority template
 	l.PushBack(match)
 }
+
+// Locate an attribute set by name
+func (style *Stylesheet) LookupAttributeSet(name string) CompiledStep {
+	attset, ok := style.AttributeSets[name]
+	if ok {
+		return attset
+	}
+	for i := style.Imports.Front(); i != nil; i = i.Next() {
+		s := i.Value.(*Stylesheet)
+		t := s.LookupAttributeSet(name)
+		if t != nil {
+			return t
+		}
+	}
+	return nil
+}

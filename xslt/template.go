@@ -291,7 +291,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		if othersets != "" {
 			asets := strings.Fields(othersets)
 			for _, attsetname := range asets {
-				a, _ := context.Style.AttributeSets[attsetname]
+				a := context.Style.LookupAttributeSet(attsetname)
 				if a != nil {
 					a.Apply(node, context)
 				}
@@ -359,7 +359,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			if attsets != "" {
 				asets := strings.Fields(attsets)
 				for _, attsetname := range asets {
-					a, _ := context.Style.AttributeSets[attsetname]
+					a := context.Style.LookupAttributeSet(attsetname)
 					if a != nil {
 						a.Apply(node, context)
 					}
@@ -657,6 +657,7 @@ func (e *LiteralResultElement) Apply(node xml.Node, context *ExecutionContext) {
 		r.SetNamespace(prefix, ns)
 	}
 
+	attsets := ""
 	for _, attr := range e.Node.Attributes() {
 		//fmt.Println(attr.Namespace(), attr.Name(), attr.Content())
 		txt := attr.Content()
@@ -664,7 +665,13 @@ func (e *LiteralResultElement) Apply(node xml.Node, context *ExecutionContext) {
 			txt = evalAVT(txt, node, context)
 		}
 		if attr.Namespace() != "" {
-			r.SetNsAttr(attr.Namespace(), attr.Name(), txt)
+			if attr.Namespace() == XSLT_NAMESPACE {
+				if attr.Name() == "use-attribute-sets" {
+					attsets = txt
+				}
+			} else {
+				r.SetNsAttr(attr.Namespace(), attr.Name(), txt)
+			}
 		} else {
 			r.SetAttr(attr.Name(), txt)
 		}
@@ -673,11 +680,10 @@ func (e *LiteralResultElement) Apply(node xml.Node, context *ExecutionContext) {
 	old := context.OutputNode
 	context.OutputNode = r
 
-	attsets := e.Node.Attr("use-attribute-sets")
 	if attsets != "" {
 		asets := strings.Fields(attsets)
 		for _, attsetname := range asets {
-			a, _ := context.Style.AttributeSets[attsetname]
+			a := context.Style.LookupAttributeSet(attsetname)
 			if a != nil {
 				a.Apply(node, context)
 			}
