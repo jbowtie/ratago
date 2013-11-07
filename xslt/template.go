@@ -259,7 +259,8 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 
 	case "value-of":
 		e := xpath.Compile(i.Node.Attr("select"))
-		o, _ := node.EvalXPath(e, context)
+		context.RegisterXPathNamespaces(i.Node.MyDocument().Root())
+		o, _ := context.EvalXPath(node, e)
 		switch output := o.(type) {
 		case []xml.Node:
 			for _, out := range output {

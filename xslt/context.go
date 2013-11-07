@@ -63,15 +63,19 @@ func (context *ExecutionContext) EvalXPath(xmlNode xml.Node, data interface{}) (
 	return
 }
 
+// Register the namespaces in scope with libxml2 so that XPaths with namespaces
+// are resolved correctly.
+
 //TODO: walk up tree to get all namespaces in scope
 // libxml probably already makes this info available
-func (context *ExecutionContext) RegisterNamespaces(node xml.Node) (err error) {
+func (context *ExecutionContext) RegisterXPathNamespaces(node xml.Node) (err error) {
 	for _, decl := range node.DeclaredNamespaces() {
 		context.XPathContext.RegisterNamespace(decl.Prefix, decl.Uri)
 	}
 	return
 }
 
+// Attempt to map a prefix to a URI.
 func (context *ExecutionContext) LookupNamespace(prefix string) (uri string) {
 	for href, pre := range context.Style.NamespaceMapping {
 		if pre == prefix {
