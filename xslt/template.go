@@ -263,8 +263,8 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		o, _ := context.EvalXPath(node, e)
 		switch output := o.(type) {
 		case []xml.Node:
-			for _, out := range output {
-				content := out.Content()
+			if len(output) > 0 {
+				content := output[0].Content()
 				//don't bother creating a text node for an empty string
 				if content != "" {
 					r := context.Output.CreateTextNode(content)
