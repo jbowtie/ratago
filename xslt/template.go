@@ -383,7 +383,14 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			context.PopStack()
 		}
 	case "copy-of":
-		i.copyToOutput(node, context, true)
+		scope := i.Node.Attr("select")
+		e := xpath.Compile(scope)
+		nodes, _ := context.EvalXPathAsNodeset(node, e)
+		total := len(nodes)
+		for j, cur := range nodes {
+			context.XPathContext.SetContextPosition(j+1, total)
+			i.copyToOutput(cur, context, true)
+		}
 
 	case "apply-imports":
 	case "message":
