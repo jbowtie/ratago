@@ -263,9 +263,16 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		switch output := o.(type) {
 		case []xml.Node:
 			for _, out := range output {
-				r := context.Output.CreateTextNode(out.Content())
-				context.OutputNode.AddChild(r)
+				content := out.Content()
+				//don't bother creating a text node for an empty string
+				if content != "" {
+					r := context.Output.CreateTextNode(content)
+					context.OutputNode.AddChild(r)
+				}
 			}
+		case float64:
+			r := context.Output.CreateTextNode(fmt.Sprintf("%v", output))
+			context.OutputNode.AddChild(r)
 		case string:
 			r := context.Output.CreateTextNode(output)
 			context.OutputNode.AddChild(r)
