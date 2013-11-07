@@ -564,9 +564,19 @@ func (i *XsltInstruction) copyToOutput(node xml.Node, context *ExecutionContext,
 			r.SetNamespace(prefix, ns)
 		}
 		context.OutputNode.AddChild(r)
+
+		//copy namespace declarations
+		for _, decl := range node.DeclaredNamespaces() {
+			r.DeclareNamespace(decl.Prefix, decl.Uri)
+		}
+
 		old := context.OutputNode
 		context.OutputNode = r
 		if recursive {
+			//copy attributes
+			for _, attr := range node.Attributes() {
+				i.copyToOutput(attr, context, recursive)
+			}
 			for cur := node.FirstChild(); cur != nil; cur = cur.NextSibling() {
 				i.copyToOutput(cur, context, recursive)
 			}
