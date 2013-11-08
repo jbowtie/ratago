@@ -566,7 +566,37 @@ func (m *CompiledMatch) IsComment() bool {
 	return op == OP_COMMENT
 }
 
-func (m *CompiledMatch) DefaultPriority() float64 {
+func (m *CompiledMatch) endsAfter(n int) bool {
+	steps := len(m.Steps)
+	if n == steps {
+		return true
+	}
+	if n+1 == steps && m.Steps[n].Op == OP_END {
+		return true
+	}
+	return false
+}
+
+func (m *CompiledMatch) DefaultPriority() (priority float64) {
 	//TODO: calculate defaults according to spec
-	return 0
+	step := m.Steps[0]
+	// *
+	if step.Op == OP_ALL {
+		if m.endsAfter(1) {
+			priority = -0.5
+		}
+	}
+	// @*
+	if step.Op == OP_ATTR && step.Value == "*" {
+		if m.endsAfter(1) {
+			priority = -0.5
+		}
+	}
+	// text(), node(), comment()
+	if step.Op == OP_TEXT || step.Op == OP_NODE || step.Op == OP_COMMENT {
+		if m.endsAfter(1) {
+			priority = -0.5
+		}
+	}
+	return
 }
