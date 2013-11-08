@@ -24,6 +24,7 @@ type Stylesheet struct {
 	NodeMatches        *list.List            //matches on node()
 	TextMatches        *list.List            //matches on text()
 	PIMatches          *list.List            //matches on processing-instruction()
+	CommentMatches     *list.List            //matches on comment()
 	IdKeyMatches       *list.List            //matches on id() or key()
 	Imports            *list.List
 	Variables          map[string]*Variable
@@ -77,6 +78,7 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 		ElementMatches:   make(map[string]*list.List),
 		AttrMatches:      make(map[string]*list.List),
 		PIMatches:        list.New(),
+		CommentMatches:   list.New(),
 		IdKeyMatches:     list.New(),
 		NodeMatches:      list.New(),
 		TextMatches:      list.New(),
@@ -433,6 +435,12 @@ func (style *Stylesheet) LookupTemplate(node xml.Node, mode string, context *Exe
 			return c.Template
 		}
 	}
+	for i := style.CommentMatches.Front(); i != nil; i = i.Next() {
+		c := i.Value.(*CompiledMatch)
+		if c.EvalMatch(node, mode, context) {
+			return c.Template
+		}
+	}
 
 	//consult the imported stylesheets
 	for i := style.Imports.Front(); i != nil; i = i.Next() {
@@ -596,6 +604,9 @@ func (style *Stylesheet) compilePattern(template *Template, priority string) {
 		}
 		if c.IsText() {
 			insertByPriority(style.TextMatches, c)
+		}
+		if c.IsComment() {
+			insertByPriority(style.CommentMatches, c)
 		}
 		if c.IsPI() {
 			insertByPriority(style.PIMatches, c)

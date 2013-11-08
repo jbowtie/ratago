@@ -561,6 +561,11 @@ func (m *CompiledMatch) IsText() bool {
 	return op == OP_TEXT
 }
 
+func (m *CompiledMatch) IsComment() bool {
+	op := m.Steps[0].Op
+	return op == OP_COMMENT
+}
+
 func (m *CompiledMatch) DefaultPriority() float64 {
 	//TODO: calculate defaults according to spec
 	return 0
