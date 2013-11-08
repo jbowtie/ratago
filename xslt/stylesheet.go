@@ -41,6 +41,8 @@ type Stylesheet struct {
 	DesiredEncoding    string //encoding specified by xsl:output
 	OmitXmlDeclaration bool   //defaults to false
 	IndentOutput       bool   //defaults to false
+	doctypeSystem      string
+	doctypePublic      string
 }
 
 // StylesheetOptions to control processing. Parameters values are passed into
@@ -231,6 +233,8 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 				// if unsupported, leave blank to output default UTF-8
 				style.DesiredEncoding = encoding
 			}
+			style.doctypeSystem = cur.Attr("doctype-system")
+			style.doctypePublic = cur.Attr("doctype-public")
 			continue
 		}
 
@@ -323,7 +327,19 @@ func (style *Stylesheet) constructOutput(output *xml.XmlDocument, options Styles
 		}
 	}
 
-	// TODO: construct DTD declaration depending on xsl:output settings
+	// construct DTD declaration depending on xsl:output settings
+	docType := ""
+	if style.doctypeSystem != "" {
+		docType = "<!DOCTYPE "
+		docType = docType + output.Root().Name()
+		if style.doctypePublic != "" {
+			docType = docType + fmt.Sprintf(" PUBLIC \"%s\"", style.doctypePublic)
+		} else {
+			docType = docType + " SYSTEM"
+		}
+		docType = docType + fmt.Sprintf(" \"%s\"", style.doctypeSystem)
+		docType = docType + ">\n"
+	}
 
 	// create the XML declaration depending on xsl:output settings
 	if outputType == "xml" {
@@ -334,6 +350,7 @@ func (style *Stylesheet) constructOutput(output *xml.XmlDocument, options Styles
 			}
 			out = out + "?>\n"
 		}
+		out = out + docType
 		format := xml.XML_SAVE_NO_DECL | xml.XML_SAVE_AS_XML
 		if options.IndentOutput || style.IndentOutput {
 			format = format | xml.XML_SAVE_FORMAT
@@ -353,6 +370,7 @@ func (style *Stylesheet) constructOutput(output *xml.XmlDocument, options Styles
 		out = out + "\n"
 	}
 	if outputType == "html" {
+		out = docType
 		b, size := output.ToHtml(nil, nil)
 		out = out + string(b[:size])
 	}
