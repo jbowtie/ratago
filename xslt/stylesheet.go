@@ -293,6 +293,8 @@ func (style *Stylesheet) Process(doc *xml.XmlDocument, options StylesheetOptions
 	context := &ExecutionContext{Output: output.Me, OutputNode: output, Style: style}
 	context.Current = doc
 	context.XPathContext = doc.DocXPathCtx()
+	// when evaluating keys/global vars position is always 1
+	context.XPathContext.SetContextPosition(1, 1)
 	start := doc
 	style.populateKeys(start, context)
 	// eval global params
