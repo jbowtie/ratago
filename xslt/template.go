@@ -339,7 +339,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			r := context.Output.CreateCommentNode(node.Content())
 			context.OutputNode.AddChild(r)
 		case xml.XML_PI_NODE:
-			name := node.Attr("name")
+			name := node.Name()
 			r := context.Output.CreatePINode(name, node.Content())
 			context.OutputNode.AddChild(r)
 		case xml.XML_ELEMENT_NODE:
