@@ -705,7 +705,6 @@ func evalAVT(input string, node xml.Node, context *ExecutionContext) (out string
 		}
 		r, width := utf8.DecodeRuneInString(input[pos:])
 		pos += width
-		//TODO: handle doubled braces in an AVT
 		if r == '\'' {
 			inSQlit = !inSQlit
 		}
@@ -713,12 +712,34 @@ func evalAVT(input string, node xml.Node, context *ExecutionContext) (out string
 			inDQlit = !inDQlit
 		}
 		if r == '{' {
+			// if we're not the last character
+			if pos < len(input) {
+				// check for doubled opening brace
+				peek, w := utf8.DecodeRuneInString(input[pos:])
+				if peek == '{' {
+					out = out + input[start:pos]
+					pos += w
+					start = pos
+					continue
+				}
+			}
 			out = out + input[start:pos-width]
 			start = pos
 		}
 		if r == '}' {
 			if inSQlit || inDQlit {
 				continue
+			}
+			// if we're not the last character
+			if pos < len(input) {
+				// check for doubled closing brace
+				peek, w := utf8.DecodeRuneInString(input[pos:])
+				if peek == '}' {
+					out = out + input[start:pos]
+					pos += w
+					start = pos
+					continue
+				}
 			}
 			expr := input[start : pos-width]
 			ret, _ := context.EvalXPath(node, expr)
