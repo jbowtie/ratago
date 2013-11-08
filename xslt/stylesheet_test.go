@@ -71,13 +71,11 @@ func TestXsltREC(t *testing.T) {
 					passed = append(passed, xslname)
 				}
 			} else {
-				fmt.Println("Cannot test", xslname)
+				// can use this to debug if tests suddenly disappear
+				//fmt.Println("Cannot test", xslname)
 			}
 		}
 	}
-	//for _, p := range passed {
-	//	fmt.Println("PASSED", p)
-	//}
 	fmt.Println("passed", len(passed), "tests")
 }
 
