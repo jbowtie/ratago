@@ -90,11 +90,50 @@ func TestXsltRECexample1(t *testing.T) {
 	runXslTest(t, xslFile, inputXml, outputXml)
 }
 
-// Tests the first full example presented in the XSLT 1.0 spec
+// Tests the second full example presented in the XSLT 1.0 spec
 func TestXsltRECexample2(t *testing.T) {
 	inputXml := "testdata/REC2/data.xml"
 
 	runXslTest(t, "testdata/REC2/html.xsl", inputXml, "testdata/REC2/html.xml")
 	runXslTest(t, "testdata/REC2/svg.xsl", inputXml, "testdata/REC2/svg.xml")
 	runXslTest(t, "testdata/REC2/vrml.xsl", inputXml, "testdata/REC2/vrml.xml")
+}
+
+//convenience function to fix up the paths before running a test
+func runGeneralXslTest(t *testing.T, xslFile string) bool {
+	xslf := fmt.Sprintf("testdata/general/%v.xsl", xslFile)
+	ii := fmt.Sprintf("testdata/docs/%v.xml", xslFile)
+	oo := fmt.Sprintf("testdata/general/%v.out", xslFile)
+	return runXslTest(t, xslf, ii, oo)
+}
+
+// Runs the general suite of libxslt regression tests
+func TestXsltGeneral(t *testing.T) {
+	//runGeneralXslTest(t, "array") // document('') needs to tweak XPath context somehow
+	runGeneralXslTest(t, "bug-1-")
+	runGeneralXslTest(t, "bug-2-")
+	runGeneralXslTest(t, "bug-3-")
+	runGeneralXslTest(t, "bug-4-")
+	//runGeneralXslTest(t, "bug-5-") //seems to be an issue with for-each select=$ACTIONgrid
+	runGeneralXslTest(t, "bug-6-")
+	runGeneralXslTest(t, "bug-7-")
+	//runGeneralXslTest(t, "bug-8-")
+	runGeneralXslTest(t, "bug-9-")
+	runGeneralXslTest(t, "bug-10-")
+	runGeneralXslTest(t, "bug-11-")
+	runGeneralXslTest(t, "bug-12-")
+	runGeneralXslTest(t, "bug-13-")
+	runGeneralXslTest(t, "bug-14-")
+	runGeneralXslTest(t, "bug-15-")
+	runGeneralXslTest(t, "bug-16-")
+	runGeneralXslTest(t, "bug-17-")
+	runGeneralXslTest(t, "bug-18-")
+	runGeneralXslTest(t, "bug-19-")
+	//runGeneralXslTest(t, "bug-100") // libxslt:test extension element
+	runGeneralXslTest(t, "bug-101") // xsl:element with default namespace
+	//runGeneralXslTest(t, "bug-102") // imported xsl:attribute-set
+	//runGeneralXslTest(t, "bug-103") //copy-of needs to explcitly set empty namespace when needed
+	//runGeneralXslTest(t, "bug-104") //copy-of should preserve attr prefix if plausible
+	runGeneralXslTest(t, "bug-105")
+	runGeneralXslTest(t, "bug-106") //copy-of
 }
