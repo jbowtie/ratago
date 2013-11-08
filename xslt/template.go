@@ -352,6 +352,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 				r.SetNamespace(prefix, ns)
 			}
 			context.OutputNode.AddChild(r)
+			//context.DeclareStylesheetNamespacesIfRoot(r)
 			old := context.OutputNode
 			context.OutputNode = r
 
@@ -637,18 +638,7 @@ func (e *LiteralResultElement) Apply(node xml.Node, context *ExecutionContext) {
 
 	r := context.Output.CreateElementNode(e.Node.Name())
 	context.OutputNode.AddChild(r)
-	if context.OutputNode.NodeType() == xml.XML_DOCUMENT_NODE {
-		//add all namespace declarations to r
-		for uri, prefix := range context.Style.NamespaceMapping {
-			if uri != XSLT_NAMESPACE {
-				//these don't actually change if there is no alias
-				_, uri = ResolveAlias(context.Style, prefix, uri)
-				if !context.Style.IsExcluded(prefix) {
-					r.DeclareNamespace(prefix, uri)
-				}
-			}
-		}
-	}
+	context.DeclareStylesheetNamespacesIfRoot(r)
 	ns := e.Node.Namespace()
 	if ns != "" {
 		prefix, _ := context.Style.NamespaceMapping[ns]

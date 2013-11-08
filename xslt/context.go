@@ -271,3 +271,19 @@ func (context *ExecutionContext) DefaultNamespace(node xml.Node) string {
 	}
 	return ""
 }
+
+func (context *ExecutionContext) DeclareStylesheetNamespacesIfRoot(node xml.Node) {
+	if context.OutputNode.NodeType() != xml.XML_DOCUMENT_NODE {
+		return
+	}
+	//add all namespace declarations to r
+	for uri, prefix := range context.Style.NamespaceMapping {
+		if uri != XSLT_NAMESPACE {
+			//these don't actually change if there is no alias
+			_, uri = ResolveAlias(context.Style, prefix, uri)
+			if !context.Style.IsExcluded(prefix) {
+				node.DeclareNamespace(prefix, uri)
+			}
+		}
+	}
+}
