@@ -129,6 +129,16 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-17-")
 	runGeneralXslTest(t, "bug-18-")
 	runGeneralXslTest(t, "bug-19-")
+	runGeneralXslTest(t, "bug-20-")
+	//runGeneralXslTest(t, "bug-21-") // unparsed-entity-uri()
+	runGeneralXslTest(t, "bug-22-")
+	runGeneralXslTest(t, "bug-23-")
+	runGeneralXslTest(t, "bug-24-")
+	//runGeneralXslTest(t, "bug-25-") // encoding attr when UTF-8 explictly specified in doc
+	runGeneralXslTest(t, "bug-26-")
+	runGeneralXslTest(t, "bug-27-")
+	runGeneralXslTest(t, "bug-28-")
+	// runGeneralXslTest(t, "bug-29-") // document('href'); need to resolve to new source document
 	//runGeneralXslTest(t, "bug-100") // libxslt:test extension element
 	runGeneralXslTest(t, "bug-101") // xsl:element with default namespace
 	//runGeneralXslTest(t, "bug-102") // imported xsl:attribute-set
