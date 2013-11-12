@@ -353,7 +353,12 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 				r.SetNamespace(prefix, ns)
 			}
 			context.OutputNode.AddChild(r)
-			context.DeclareStylesheetNamespacesIfRoot(r)
+
+			//copy namespace declarations
+			for _, decl := range node.DeclaredNamespaces() {
+				r.DeclareNamespace(decl.Prefix, decl.Uri)
+			}
+
 			old := context.OutputNode
 			context.OutputNode = r
 
