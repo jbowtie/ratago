@@ -115,7 +115,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-5-") //seems to be an issue with for-each select=$ACTIONgrid
 	runGeneralXslTest(t, "bug-6-")
 	runGeneralXslTest(t, "bug-7-")
-	//runGeneralXslTest(t, "bug-8-")
+	//runGeneralXslTest(t, "bug-8-") //issue resolving imported template?
 	runGeneralXslTest(t, "bug-9-")
 	runGeneralXslTest(t, "bug-10-")
 	runGeneralXslTest(t, "bug-11-")
@@ -150,7 +150,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-100") // libxslt:test extension element
 	runGeneralXslTest(t, "bug-101") // xsl:element with default namespace
 	//runGeneralXslTest(t, "bug-102") // imported xsl:attribute-set
-	//runGeneralXslTest(t, "bug-103") //copy-of needs to explcitly set empty namespace when needed
+	//runGeneralXslTest(t, "bug-103") //copy-of needs to explicitly set empty namespace when needed
 	//runGeneralXslTest(t, "bug-104") //copy-of should preserve attr prefix if plausible
 	runGeneralXslTest(t, "bug-105")
 	runGeneralXslTest(t, "bug-106") //copy-of

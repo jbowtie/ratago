@@ -12,9 +12,7 @@ TODO
 
 There are several tasks remaining to reach full compliance. Until these tasks are complete the API is subject to change.
 
-* [ ] Distinguish between nodesets and RVTs (needed to pass 11.2-3)
-* [ ] Correctly resolve "/.." to the empty nodeset (needed to pass 11.2-6)
-* [ ] Fully implement xsl:include (no tests in initial suite)
-* [ ] Fully implement xsl:with-param (no tests in initial suite)
-* [ ] Ensure that errors are properly progogated in Go fashion.
+* Fully implement xsl:include (see tests in libxslt general suite)
+* Fully implement xsl:with-param (no tests in initial suite)
+* Ensure that errors are properly progogated in Go fashion.
 

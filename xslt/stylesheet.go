@@ -439,34 +439,48 @@ func (style *Stylesheet) LookupTemplate(node xml.Node, mode string, context *Exe
 	for i := style.IdKeyMatches.Front(); i != nil; i = i.Next() {
 		c := i.Value.(*CompiledMatch)
 		if c.EvalMatch(node, mode, context) {
-			return c.Template
+			insertByPriority(found, c)
+			break
 		}
 	}
 	for i := style.NodeMatches.Front(); i != nil; i = i.Next() {
 		c := i.Value.(*CompiledMatch)
 		if c.EvalMatch(node, mode, context) {
-			return c.Template
+			insertByPriority(found, c)
+			break
 		}
 	}
 	for i := style.TextMatches.Front(); i != nil; i = i.Next() {
 		c := i.Value.(*CompiledMatch)
 		if c.EvalMatch(node, mode, context) {
-			return c.Template
+			insertByPriority(found, c)
+			break
 		}
 	}
 	for i := style.PIMatches.Front(); i != nil; i = i.Next() {
 		c := i.Value.(*CompiledMatch)
 		if c.EvalMatch(node, mode, context) {
-			return c.Template
+			insertByPriority(found, c)
+			break
 		}
 	}
 	for i := style.CommentMatches.Front(); i != nil; i = i.Next() {
 		c := i.Value.(*CompiledMatch)
 		if c.EvalMatch(node, mode, context) {
-			return c.Template
+			insertByPriority(found, c)
+			break
 		}
 	}
 
+	// if there's a match at this import precedence, return
+	// the one with the highest priority
+	f := found.Front()
+	if f != nil {
+		template = f.Value.(*CompiledMatch).Template
+		return
+	}
+
+	// no match at this import precedence,
 	//consult the imported stylesheets
 	for i := style.Imports.Front(); i != nil; i = i.Next() {
 		s := i.Value.(*Stylesheet)
@@ -474,10 +488,6 @@ func (style *Stylesheet) LookupTemplate(node xml.Node, mode string, context *Exe
 		if t != nil {
 			return t
 		}
-	}
-	f := found.Front()
-	if f != nil {
-		template = f.Value.(*CompiledMatch).Template
 	}
 	return
 }
