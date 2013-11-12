@@ -121,7 +121,11 @@ func lexNodeTest(l *lexer) stateFn {
 			return lexParent
 		case '(':
 			l.backup()
-			return lexFunctionCall
+			if attr {
+				return lexAttrNodeTest
+			} else {
+				return lexFunctionCall
+			}
 		case '[':
 			l.backup()
 			if l.pos > l.start {
@@ -221,7 +225,36 @@ func lexFunctionCall(l *lexer) stateFn {
 			}
 		}
 	}
-	return nil
+	return lexNodeTest
+}
+
+func lexAttrNodeTest(l *lexer) stateFn {
+	fnName := l.input[l.start:l.pos]
+	op := OP_ERROR
+	switch fnName {
+	case "node":
+		op = OP_ATTR
+	}
+	l.ignore()
+	depth := 0
+	for {
+		r := l.next()
+		if r == eof {
+			//TODO: parse error
+			break
+		}
+		if r == '(' {
+			depth = depth + 1
+		}
+		if r == ')' {
+			depth = depth - 1
+			if depth == 0 {
+				l.steps <- &MatchStep{op, "*"}
+				l.start = l.pos
+			}
+		}
+	}
+	return lexNodeTest
 }
 
 func lexPredicate(l *lexer) stateFn {
@@ -583,20 +616,45 @@ func (m *CompiledMatch) DefaultPriority() (priority float64) {
 	// *
 	if step.Op == OP_ALL {
 		if m.endsAfter(1) {
-			priority = -0.5
+			return -0.5
+		}
+		// ns:*
+		if m.endsAfter(2) && m.Steps[1].Op == OP_NS {
+			return -0.25
 		}
 	}
 	// @*
 	if step.Op == OP_ATTR && step.Value == "*" {
 		if m.endsAfter(1) {
-			priority = -0.5
+			return -0.5
+		}
+		if m.endsAfter(2) && m.Steps[1].Op == OP_NS {
+			return -0.25
 		}
 	}
 	// text(), node(), comment()
 	if step.Op == OP_TEXT || step.Op == OP_NODE || step.Op == OP_COMMENT {
 		if m.endsAfter(1) {
-			priority = -0.5
+			return -0.5
 		}
 	}
-	return
+	// QName
+	if step.Op == OP_ELEM {
+		if m.endsAfter(1) {
+			return 0
+		}
+		if m.endsAfter(2) && m.Steps[1].Op == OP_NS {
+			return 0
+		}
+	}
+	// @QName
+	if step.Op == OP_ATTR && step.Value != "*" {
+		if m.endsAfter(1) {
+			return 0
+		}
+		if m.endsAfter(2) && m.Steps[1].Op == OP_NS {
+			return 0
+		}
+	}
+	return 0.5
 }

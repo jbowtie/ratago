@@ -137,6 +137,16 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-27-")
 	runGeneralXslTest(t, "bug-28-")
 	// runGeneralXslTest(t, "bug-29-") // document('href'); need to resolve to new source document
+	runGeneralXslTest(t, "bug-30-")
+	runGeneralXslTest(t, "bug-31-")
+	runGeneralXslTest(t, "bug-32-")
+	runGeneralXslTest(t, "bug-33-")
+	//runGeneralXslTest(t, "bug-34-")
+	runGeneralXslTest(t, "bug-35-")
+	//runGeneralXslTest(t, "bug-36-") //xsl:include
+	//runGeneralXslTest(t, "bug-37-") //xsl:include
+	//runGeneralXslTest(t, "bug-38-") // document('')
+	runGeneralXslTest(t, "bug-39-")
 	//runGeneralXslTest(t, "bug-100") // libxslt:test extension element
 	runGeneralXslTest(t, "bug-101") // xsl:element with default namespace
 	//runGeneralXslTest(t, "bug-102") // imported xsl:attribute-set

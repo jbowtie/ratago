@@ -53,6 +53,12 @@ func TestPatternWildcardAttrib(t *testing.T) {
 	compareStep(t, steps[1], OP_END, "")
 }
 
+func TestPatternNodeTestAttrib(t *testing.T) {
+	steps := parseMatchPattern("@node()")
+	compareStep(t, steps[0], OP_ATTR, "*")
+	compareStep(t, steps[1], OP_END, "")
+}
+
 func TestPatternAttribWithParent(t *testing.T) {
 	steps := parseMatchPattern("foo/@bar")
 	compareStep(t, steps[0], OP_ATTR, "bar")

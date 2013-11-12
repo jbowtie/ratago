@@ -194,6 +194,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			}
 		}
 		context.OutputNode.AddChild(r)
+		context.DeclareStylesheetNamespacesIfRoot(r)
 		old := context.OutputNode
 		context.OutputNode = r
 
@@ -352,7 +353,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 				r.SetNamespace(prefix, ns)
 			}
 			context.OutputNode.AddChild(r)
-			//context.DeclareStylesheetNamespacesIfRoot(r)
+			context.DeclareStylesheetNamespacesIfRoot(r)
 			old := context.OutputNode
 			context.OutputNode = r
 

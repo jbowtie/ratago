@@ -228,7 +228,7 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 				style.IndentOutput = true
 			}
 			encoding := cur.Attr("encoding")
-			if encoding != "" && encoding != "UTF-8" && encoding != "utf-8" {
+			if encoding != "" && encoding != "utf-8" {
 				//TODO: emit a warning if we do not support the encoding
 				// if unsupported, leave blank to output default UTF-8
 				style.DesiredEncoding = encoding
@@ -394,12 +394,14 @@ func (style *Stylesheet) LookupTemplate(node xml.Node, mode string, context *Exe
 	if node.NodeType() == xml.XML_DOCUMENT_NODE {
 		name = "/"
 	}
+	found := new(list.List)
 	l := style.ElementMatches[name]
 	if l != nil {
 		for i := l.Front(); i != nil; i = i.Next() {
 			c := i.Value.(*CompiledMatch)
 			if c.EvalMatch(node, mode, context) {
-				return c.Template
+				insertByPriority(found, c)
+				break
 			}
 		}
 	}
@@ -408,7 +410,8 @@ func (style *Stylesheet) LookupTemplate(node xml.Node, mode string, context *Exe
 		for i := l.Front(); i != nil; i = i.Next() {
 			c := i.Value.(*CompiledMatch)
 			if c.EvalMatch(node, mode, context) {
-				return c.Template
+				insertByPriority(found, c)
+				break
 			}
 		}
 	}
@@ -417,7 +420,8 @@ func (style *Stylesheet) LookupTemplate(node xml.Node, mode string, context *Exe
 		for i := l.Front(); i != nil; i = i.Next() {
 			c := i.Value.(*CompiledMatch)
 			if c.EvalMatch(node, mode, context) {
-				return c.Template
+				insertByPriority(found, c)
+				break
 			}
 		}
 	}
@@ -426,7 +430,8 @@ func (style *Stylesheet) LookupTemplate(node xml.Node, mode string, context *Exe
 		for i := l.Front(); i != nil; i = i.Next() {
 			c := i.Value.(*CompiledMatch)
 			if c.EvalMatch(node, mode, context) {
-				return c.Template
+				insertByPriority(found, c)
+				break
 			}
 		}
 	}
@@ -469,6 +474,10 @@ func (style *Stylesheet) LookupTemplate(node xml.Node, mode string, context *Exe
 		if t != nil {
 			return t
 		}
+	}
+	f := found.Front()
+	if f != nil {
+		template = f.Value.(*CompiledMatch).Template
 	}
 	return
 }
