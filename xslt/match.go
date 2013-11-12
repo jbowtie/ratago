@@ -173,6 +173,7 @@ func lexNodeTest(l *lexer) stateFn {
 			_ = l.next()
 			l.emit(OP_OR)
 			l.ignore()
+			return lexNodeTest
 		default:
 		}
 		//switch?

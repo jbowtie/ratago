@@ -146,3 +146,11 @@ func TestPatternOr(t *testing.T) {
 	compareStep(t, steps[2], OP_ELEM, "foo")
 	compareStep(t, steps[3], OP_END, "")
 }
+
+func TestPatternOrAtrr(t *testing.T) {
+	steps := parseMatchPattern("@foo|bar")
+	compareStep(t, steps[0], OP_ELEM, "bar")
+	compareStep(t, steps[1], OP_OR, "|")
+	compareStep(t, steps[2], OP_ATTR, "foo")
+	compareStep(t, steps[3], OP_END, "")
+}

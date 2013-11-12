@@ -608,6 +608,7 @@ func (style *Stylesheet) compilePattern(template *Template, priority string) {
 		//  calculate priority if not explicitly set
 		if priority == "" {
 			template.Priority = c.DefaultPriority()
+			//fmt.Println("COMPILED", template.Match, c.Steps[0].Value, c.Steps[0].Op, template.Priority)
 		}
 		// insert into 'best' collection
 		if c.IsElement() {
