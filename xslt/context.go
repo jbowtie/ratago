@@ -6,7 +6,6 @@ import (
 	"github.com/moovweb/gokogiri/xml"
 	"github.com/moovweb/gokogiri/xpath"
 	"strings"
-	"unsafe"
 )
 
 // ExecutionContext is passed to XSLT instructions during processing.
@@ -85,7 +84,7 @@ func (context *ExecutionContext) LookupNamespace(prefix string) (uri string) {
 	return
 }
 
-func (context *ExecutionContext) EvalXPathAsNodeset(xmlNode xml.Node, data interface{}) (result xml.Nodeset, err error) {
+func (context *ExecutionContext) EvalXPathAsNodeset(xmlNode xml.Node, data interface{}) (result Nodeset, err error) {
 	_, err = context.EvalXPath(xmlNode, data)
 	if err != nil {
 		return nil, err
@@ -94,7 +93,7 @@ func (context *ExecutionContext) EvalXPathAsNodeset(xmlNode xml.Node, data inter
 	if err != nil {
 		return nil, err
 	}
-	var output xml.Nodeset
+	var output Nodeset
 	for _, nodePtr := range nodePtrs {
 		output = append(output, xml.NewNode(nodePtr, xmlNode.MyDocument()))
 	}
@@ -183,13 +182,13 @@ func (context *ExecutionContext) ResolveVariable(name, ns string) (ret interface
 	}
 
 	switch val := v.Value.(type) {
-	case xml.Nodeset:
+	case Nodeset:
 		/*scope := v.Node.Attr("select")
 		if scope == "" {
 			return unsafe.Pointer(val.ToXPathValueTree())
 		}*/
-		return unsafe.Pointer(val.ToXPathNodeset())
-		//return val.ToPointers()
+		//return unsafe.Pointer(val.ToXPathNodeset())
+		return val.ToPointers()
 	default:
 		return val
 	}

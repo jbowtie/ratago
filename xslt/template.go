@@ -92,7 +92,7 @@ func (i *Variable) Apply(node xml.Node, context *ExecutionContext) {
 		c.Apply(node, context)
 	}
 	i.Value = nil
-	var outNodes xml.Nodeset
+	var outNodes Nodeset
 	for cur := context.OutputNode.FirstChild(); cur != nil; cur = cur.NextSibling() {
 		outNodes = append(outNodes, cur)
 	}
