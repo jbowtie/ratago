@@ -19,6 +19,7 @@ type Template struct {
 	Match    string
 	Priority float64
 	Children []CompiledStep
+	Node     xml.Node
 }
 
 type XsltInstruction struct {
@@ -145,9 +146,13 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			context.XPathContext.SetContextPosition(oldpos, oldtotal)
 			return
 		}
+		context.RegisterXPathNamespaces(i.Node)
 		e := xpath.Compile(scope)
 		// TODO: ensure we apply strip-space if required
-		nodes, _ := context.EvalXPathAsNodeset(node, e)
+		nodes, err := context.EvalXPathAsNodeset(node, e)
+		if err != nil {
+			fmt.Println("apply-templates @select", err)
+		}
 		if i.sorting != nil {
 			i.Sort(nodes, context)
 		}
@@ -260,7 +265,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 
 	case "value-of":
 		e := xpath.Compile(i.Node.Attr("select"))
-		context.RegisterXPathNamespaces(i.Node.MyDocument().Root())
+		context.RegisterXPathNamespaces(i.Node)
 		o, _ := context.EvalXPath(node, e)
 		switch output := o.(type) {
 		case []xml.Node:

@@ -390,7 +390,13 @@ func (m *CompiledMatch) EvalMatch(node xml.Node, mode string, context *Execution
 				return false
 			}
 		case OP_NS:
-			uri := context.LookupNamespace(step.Value)
+			uri := ""
+			// m.Template.Node
+			if m.Template != nil {
+				uri = context.LookupNamespace(step.Value, m.Template.Node)
+			} else {
+				uri = context.LookupNamespace(step.Value, nil)
+			}
 			if uri != cur.Namespace() {
 				return false
 			}

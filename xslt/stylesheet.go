@@ -596,7 +596,7 @@ func (style *Stylesheet) ParseTemplate(node xml.Node) {
 	}
 
 	// TODO: validate the name (duplicate should raise error)
-	template := &Template{Match: match, Mode: mode, Name: name, Priority: p}
+	template := &Template{Match: match, Mode: mode, Name: name, Priority: p, Node: node}
 
 	template.CompileContent(node)
 

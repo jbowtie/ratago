@@ -68,14 +68,34 @@ func (context *ExecutionContext) EvalXPath(xmlNode xml.Node, data interface{}) (
 //TODO: walk up tree to get all namespaces in scope
 // libxml probably already makes this info available
 func (context *ExecutionContext) RegisterXPathNamespaces(node xml.Node) (err error) {
-	for _, decl := range node.DeclaredNamespaces() {
-		context.XPathContext.RegisterNamespace(decl.Prefix, decl.Uri)
+	seen := make(map[string]bool)
+	for n := node; n != nil; n = n.Parent() {
+		for _, decl := range n.DeclaredNamespaces() {
+			alreadySeen, _ := seen[decl.Prefix]
+			if !alreadySeen {
+				context.XPathContext.RegisterNamespace(decl.Prefix, decl.Uri)
+				seen[decl.Prefix] = true
+			}
+		}
 	}
 	return
 }
 
 // Attempt to map a prefix to a URI.
-func (context *ExecutionContext) LookupNamespace(prefix string) (uri string) {
+func (context *ExecutionContext) LookupNamespace(prefix string, node xml.Node) (uri string) {
+	//if given a context node, see if the prefix is in scope
+	if node != nil {
+		for n := node; n != nil; n = n.Parent() {
+			for _, decl := range n.DeclaredNamespaces() {
+				if decl.Prefix == prefix {
+					return decl.Uri
+				}
+			}
+		}
+		return
+	}
+
+	//if no context node, simply check the stylesheet map
 	for href, pre := range context.Style.NamespaceMapping {
 		if pre == prefix {
 			return href
