@@ -115,7 +115,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-5-") //seems to be an issue with for-each select=$ACTIONgrid
 	runGeneralXslTest(t, "bug-6-")
 	runGeneralXslTest(t, "bug-7-")
-	//runGeneralXslTest(t, "bug-8-") //issue resolving imported template?
+	runGeneralXslTest(t, "bug-8-") //issue resolving namespaces in imported stylesheet
 	runGeneralXslTest(t, "bug-9-")
 	runGeneralXslTest(t, "bug-10-")
 	runGeneralXslTest(t, "bug-11-")
@@ -147,6 +147,33 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-37-") //xsl:include
 	//runGeneralXslTest(t, "bug-38-") // document('')
 	runGeneralXslTest(t, "bug-39-")
+	//runGeneralXslTest(t, "bug-40-") //variable scope is globals when call-template is invoked
+	//runGeneralXslTest(t, "bug-41-") //also avoid overwriting global variable using with-param
+	//runGeneralXslTest(t, "bug-42-") //as 40 but for apply-templates
+	//runGeneralXslTest(t, "bug-43-") //as 41 but for apply-templates
+	//runGeneralXslTest(t, "bug-44-") // with-param
+	//runGeneralXslTest(t, "bug-45-") // with-param
+	runGeneralXslTest(t, "bug-46-")
+	runGeneralXslTest(t, "bug-47-")
+	runGeneralXslTest(t, "bug-48-")
+	//runGeneralXslTest(t, "bug-49-") // global variable defined in terms of inner variable
+	runGeneralXslTest(t, "bug-50-")
+	//runGeneralXslTest(t, "bug-52") //unparsed-entity-uri
+	//runGeneralXslTest(t, "bug-53") // depends on DTD processing of ATTLIST with default attribute
+	runGeneralXslTest(t, "bug-54")
+	runGeneralXslTest(t, "bug-55")
+	//runGeneralXslTest(t, "bug-56") // unsure what's going on here
+	runGeneralXslTest(t, "bug-57")
+	runGeneralXslTest(t, "bug-59")
+	//runGeneralXslTest(t, "bug-60")
+	//runGeneralXslTest(t, "bug-61")
+	runGeneralXslTest(t, "bug-62")
+	//runGeneralXslTest(t, "bug-63")
+	runGeneralXslTest(t, "bug-64")
+	//runGeneralXslTest(t, "bug-65")
+	//runGeneralXslTest(t, "bug-66")
+	runGeneralXslTest(t, "bug-68")
+	runGeneralXslTest(t, "bug-69")
 	//runGeneralXslTest(t, "bug-100") // libxslt:test extension element
 	runGeneralXslTest(t, "bug-101") // xsl:element with default namespace
 	//runGeneralXslTest(t, "bug-102") // imported xsl:attribute-set
