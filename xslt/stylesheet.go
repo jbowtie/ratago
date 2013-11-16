@@ -544,7 +544,7 @@ func (style *Stylesheet) processNode(node xml.Node, context *ExecutionContext) {
 		return
 	}
 	//apply template to current node
-	template.Apply(node, context)
+	template.Apply(node, context, nil)
 }
 
 func (style *Stylesheet) populateKeys(node xml.Node, context *ExecutionContext) {

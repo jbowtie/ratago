@@ -1,6 +1,7 @@
 package xslt
 
 import (
+	"container/list"
 	"fmt"
 	"github.com/moovweb/gokogiri/xml"
 	"github.com/moovweb/gokogiri/xpath"
@@ -172,7 +173,8 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		name := i.Node.Attr("name")
 		t, ok := context.Style.NamedTemplates[name]
 		if ok && t != nil {
-			t.Apply(node, context)
+			// TODO: with-params
+			t.Apply(node, context, nil)
 		}
 
 	case "element":
@@ -817,8 +819,10 @@ func CompileSingleNode(node xml.Node) (step CompiledStep) {
 	return
 }
 
-func (template *Template) Apply(node xml.Node, context *ExecutionContext) {
+func (template *Template) Apply(node xml.Node, context *ExecutionContext, params []*Variable) {
 	//init local scope
+	oldStack := context.Stack
+	context.Stack = *new(list.List)
 	context.PushStack()
 	//populate any params (including those passed via with-params)
 	for _, c := range template.Children {
@@ -835,4 +839,6 @@ func (template *Template) Apply(node xml.Node, context *ExecutionContext) {
 	// if forwards-compatible
 	//   apply fallback
 	// break out of loop if terminated by xsl:message
+	//restore any existing stack
+	context.Stack = oldStack
 }

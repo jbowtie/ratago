@@ -151,9 +151,9 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-37-") //xsl:include
 	//runGeneralXslTest(t, "bug-38-") // document('')
 	runGeneralXslTest(t, "bug-39-")
-	//runGeneralXslTest(t, "bug-40-") //variable scope is globals when call-template is invoked
+	runGeneralXslTest(t, "bug-40-") //variable scope is global when call-template is invoked
 	//runGeneralXslTest(t, "bug-41-") //also avoid overwriting global variable using with-param
-	//runGeneralXslTest(t, "bug-42-") //as 40 but for apply-templates
+	runGeneralXslTest(t, "bug-42-") //as 40 but for apply-templates
 	//runGeneralXslTest(t, "bug-43-") //as 41 but for apply-templates
 	//runGeneralXslTest(t, "bug-44-") // with-param
 	//runGeneralXslTest(t, "bug-45-") // with-param
@@ -178,7 +178,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-66")
 	runGeneralXslTest(t, "bug-68")
 	runGeneralXslTest(t, "bug-69")
-	//runGeneralXslTest(t, "bug-70") //causes panic! fix this
+	//runGeneralXslTest(t, "bug-70") // key() - nodeset as arg 2
 	//runGeneralXslTest(t, "bug-71")
 	//runGeneralXslTest(t, "bug-72")
 	runGeneralXslTest(t, "bug-73")
