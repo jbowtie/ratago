@@ -12,14 +12,13 @@ func (style *Stylesheet) RegisterXsltFunctions() {
 	style.Functions["system-property"] = XsltSystemProperty
 	style.Functions["document"] = XsltDocumentFn
 	//element-available
-	//function-available
-	//document
-	//id
-	//current
+	//function-available - possibly internal to Gokogiri?
+	//id - see implementation in match.go
+	//current - need to set appropriately in context
 	//lang
-	//generate-id
-	//unparsed-entity-uri
-	//format-number
+	//generate-id - just use pointer to node as string?
+	//unparsed-entity-uri - requires Gokogiri to expose API
+	//format-number - requires handling decimal-format
 }
 
 type Nodeset []xml.Node
@@ -29,17 +28,6 @@ type Key struct {
 	use   string
 	match string
 }
-
-/*
-func (key *Key) Evaluate() {
-    c := CompileMatch()
-    for n in doc.Nodes {
-        if c.Matches(n) {
-            Nodes = append(Nodes, n)
-        }
-    }
-}
-*/
 
 func (n Nodeset) ToPointers() (pointers []unsafe.Pointer) {
 	for _, node := range n {

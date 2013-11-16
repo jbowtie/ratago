@@ -2,6 +2,7 @@ package xslt
 
 import (
 	"fmt"
+	"github.com/moovweb/gokogiri/xml"
 	"strconv"
 	"strings"
 	"unicode"
@@ -238,6 +239,61 @@ func parseFormatString(format string) (tokens []fmtToken) {
 	}
 	if pos > start {
 		tokens = append(tokens, fmtToken{format[start:], !punct})
+	}
+	return
+}
+
+func matchesOne(node xml.Node, patterns []*CompiledMatch) bool {
+	for _, m := range patterns {
+		if m.EvalMatch(node, "", nil) {
+			return true
+		}
+	}
+	return false
+}
+
+func findTarget(node xml.Node, count string) (target xml.Node) {
+	countExpr := CompileMatch(count, nil)
+	for cur := node; cur != nil; cur = cur.Parent() {
+		if matchesOne(cur, countExpr) {
+			return cur
+		}
+	}
+	return
+}
+
+func countNodes(level string, node xml.Node, count string, from string) (num int) {
+	//compile count, from matches
+	countExpr := CompileMatch(count, nil)
+	fromExpr := CompileMatch(from, nil)
+	cur := node
+	for cur != nil {
+		//if matches count, num++
+		if matchesOne(cur, countExpr) {
+			num = num + 1
+		}
+		//if matches from, break
+		if matchesOne(cur, fromExpr) {
+			break
+		}
+
+		t := cur
+		cur = cur.PreviousSibling()
+
+		//for level = 'any' we need walk the preceding axis
+		//this finds the last descendant of our previous sibling
+		if cur != nil && level == "any" {
+			for cur.LastChild() != nil {
+				cur = cur.LastChild()
+			}
+		}
+
+		// no preceding node; for level='any' go to ancestor
+		if cur == nil && level == "any" {
+			cur = t.Parent()
+		}
+
+		//break on document node
 	}
 	return
 }
