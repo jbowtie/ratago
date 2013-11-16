@@ -56,7 +56,13 @@ func XsltKey(context xpath.VariableScope, args []interface{}) interface{} {
 	// always convert to string
 	name := args[0].(string)
 	// convert to string (TODO: unless nodeset)
-	val := args[1].(string)
+	val := ""
+	switch v := args[1].(type) {
+	case string:
+		val = v
+	case []unsafe.Pointer:
+		// nodeset; see xsl:key spec for how to handle this
+	}
 	//get the execution context
 	c := context.(*ExecutionContext)
 	//look up the key
