@@ -298,7 +298,7 @@ func CompileSingleNode(node xml.Node) (step CompiledStep) {
 			switch node.Name() {
 			case "variable":
 				step = &Variable{Node: node}
-			case "param":
+			case "param", "with-param":
 				step = &Variable{Node: node}
 			default:
 				step = &XsltInstruction{Name: node.Name(), Node: node}
@@ -316,16 +316,29 @@ func CompileSingleNode(node xml.Node) (step CompiledStep) {
 	return
 }
 
+func selectParamValue(param *Variable, withParams []*Variable) (out *Variable) {
+	for _, p := range withParams {
+		if param.Name == p.Name {
+			return p
+		}
+	}
+	return param
+}
+
 func (template *Template) Apply(node xml.Node, context *ExecutionContext, params []*Variable) {
 	//init local scope
 	oldStack := context.Stack
 	context.Stack = *new(list.List)
 	context.PushStack()
-	//populate any params (including those passed via with-params)
+
 	for _, c := range template.Children {
 		c.Apply(node, context)
 		switch v := c.(type) {
 		case *Variable:
+			//populate any params (including those passed via with-params)
+			if IsXsltName(v.Node, "param") {
+				v = selectParamValue(v, params)
+			}
 			_ = context.DeclareLocalVariable(v.Name, "", v)
 		}
 	}

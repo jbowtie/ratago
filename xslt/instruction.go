@@ -103,8 +103,18 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		name := i.Node.Attr("name")
 		t, ok := context.Style.NamedTemplates[name]
 		if ok && t != nil {
-			// TODO: with-params
-			t.Apply(node, context, nil)
+			// TODO: determine with-params at compile time
+			var params []*Variable
+			for _, cur := range i.Children {
+				switch p := cur.(type) {
+				case *Variable:
+					if IsXsltName(p.Node, "with-param") {
+						p.Apply(node, context)
+						params = append(params, p)
+					}
+				}
+			}
+			t.Apply(node, context, params)
 		}
 
 	case "element":
@@ -260,6 +270,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			}
 		}
 	case "copy":
+		//i.copyToOutput(cur, context, false)
 		switch node.NodeType() {
 		case xml.XML_TEXT_NODE:
 			r := context.Output.CreateTextNode(node.Content())
