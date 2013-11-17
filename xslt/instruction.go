@@ -369,10 +369,22 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 
 	case "apply-imports":
 	case "message":
-	case "with-param":
 		fmt.Println("TODO instruction ", i.Name)
 	default:
-		fmt.Println("UNKNOWN instruction ", i.Name)
+		hasFallback := false
+		for _, c := range i.Children {
+			switch v := c.(type) {
+			case *XsltInstruction:
+				if v.Name == "fallback" {
+					c.Apply(node, context)
+					hasFallback = true
+					break
+				}
+			}
+		}
+		if !hasFallback {
+			fmt.Println("UNKNOWN instruction ", i.Name)
+		}
 	}
 }
 

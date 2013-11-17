@@ -169,7 +169,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-56") // unsure what's going on here
 	runGeneralXslTest(t, "bug-57")
 	runGeneralXslTest(t, "bug-59")
-	//runGeneralXslTest(t, "bug-60")
+	runGeneralXslTest(t, "bug-60") // fallback for unknown XSL element
 	//runGeneralXslTest(t, "bug-61")
 	runGeneralXslTest(t, "bug-62")
 	//runGeneralXslTest(t, "bug-63")

@@ -331,6 +331,10 @@ func (template *Template) Apply(node xml.Node, context *ExecutionContext, params
 	context.Stack = *new(list.List)
 	context.PushStack()
 
+	//for each node in compiled template body
+	// if xsl:message
+	// if forwards-compatible
+	//   apply fallback
 	for _, c := range template.Children {
 		c.Apply(node, context)
 		switch v := c.(type) {
@@ -342,13 +346,8 @@ func (template *Template) Apply(node xml.Node, context *ExecutionContext, params
 			_ = context.DeclareLocalVariable(v.Name, "", v)
 		}
 	}
-	context.PopStack()
-	//apply sequence ctr
-	//for each node in compiled template body
-	// if xsl:message
-	// if forwards-compatible
-	//   apply fallback
 	// break out of loop if terminated by xsl:message
 	//restore any existing stack
+	context.PopStack()
 	context.Stack = oldStack
 }
