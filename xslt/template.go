@@ -78,9 +78,15 @@ func (i *Variable) Apply(node xml.Node, context *ExecutionContext) {
 	// if multiple children, return nodeset
 	curOutput := context.OutputNode
 	context.OutputNode = context.Output.CreateElementNode("RVT")
+	context.PushStack()
 	for _, c := range i.Children {
 		c.Apply(node, context)
+		switch v := c.(type) {
+		case *Variable:
+			_ = context.DeclareLocalVariable(v.Name, "", v)
+		}
 	}
+	context.PopStack()
 	i.Value = nil
 	var outNodes Nodeset
 	for cur := context.OutputNode.FirstChild(); cur != nil; cur = cur.NextSibling() {

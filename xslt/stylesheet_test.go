@@ -160,7 +160,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-46-")
 	runGeneralXslTest(t, "bug-47-")
 	runGeneralXslTest(t, "bug-48-")
-	//runGeneralXslTest(t, "bug-49-") // global variable defined in terms of inner variable
+	runGeneralXslTest(t, "bug-49-") // global variable defined in terms of inner variable
 	runGeneralXslTest(t, "bug-50-")
 	//runGeneralXslTest(t, "bug-52") //unparsed-entity-uri
 	//runGeneralXslTest(t, "bug-53") // depends on DTD processing of ATTLIST with default attribute

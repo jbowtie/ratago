@@ -237,6 +237,7 @@ func (context *ExecutionContext) DeclareLocalVariable(name, ns string, v *Variab
 	e := context.Stack.Front()
 	scope := e.Value.(map[string]*Variable)
 	scope[name] = v
+	//fmt.Println("DECLARE", name, v)
 	return nil
 }
 
@@ -245,6 +246,7 @@ func (context *ExecutionContext) LookupLocalVariable(name, ns string) (ret *Vari
 		scope := e.Value.(map[string]*Variable)
 		v, ok := scope[name]
 		if ok {
+			//fmt.Println("FOUND", name, v)
 			return v
 		}
 	}
