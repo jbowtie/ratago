@@ -63,6 +63,18 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		if mode != context.Mode && mode != "#current" {
 			context.Mode = mode
 		}
+		// TODO: determine with-params at compile time
+		var params []*Variable
+		for _, cur := range i.Children {
+			switch p := cur.(type) {
+			case *Variable:
+				if IsXsltName(p.Node, "with-param") {
+					p.Apply(node, context)
+					params = append(params, p)
+				}
+			}
+		}
+		// By default, scope is children of current node
 		if scope == "" {
 			children := context.ChildrenOf(node)
 			if i.sorting != nil {
@@ -72,7 +84,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			oldpos, oldtotal := context.XPathContext.GetContextPosition()
 			for i, cur := range children {
 				context.XPathContext.SetContextPosition(i+1, total)
-				context.Style.processNode(cur, context)
+				context.Style.processNode(cur, context, params)
 			}
 			context.XPathContext.SetContextPosition(oldpos, oldtotal)
 			return
@@ -90,7 +102,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		total := len(nodes)
 		for i, cur := range nodes {
 			context.XPathContext.SetContextPosition(i+1, total)
-			context.Style.processNode(cur, context)
+			context.Style.processNode(cur, context, params)
 		}
 	case "number":
 		i.numbering(node, context)

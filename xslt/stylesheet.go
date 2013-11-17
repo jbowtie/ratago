@@ -308,7 +308,7 @@ func (style *Stylesheet) Process(doc *xml.XmlDocument, options StylesheetOptions
 	}
 	// set xpath context
 	// process nodes
-	style.processNode(start, context)
+	style.processNode(start, context, nil)
 
 	out, err = style.constructOutput(output, options)
 	// reset anything required for re-use
@@ -512,7 +512,7 @@ func (style *Stylesheet) processDefaultRule(node xml.Node, context *ExecutionCon
 	total := len(children)
 	for i, cur := range children {
 		context.XPathContext.SetContextPosition(i+1, total)
-		style.processNode(cur, context)
+		style.processNode(cur, context, nil)
 	}
 	//default for CDATA, TEXT, ATTR is copy as text
 	if node.NodeType() == xml.XML_TEXT_NODE {
@@ -530,7 +530,7 @@ func (style *Stylesheet) processDefaultRule(node xml.Node, context *ExecutionCon
 	//default for namespace declaration is copy to output document
 }
 
-func (style *Stylesheet) processNode(node xml.Node, context *ExecutionContext) {
+func (style *Stylesheet) processNode(node xml.Node, context *ExecutionContext, params []*Variable) {
 	//get template
 	template := style.LookupTemplate(node, context.Mode, context)
 	//  for each import scope
@@ -544,7 +544,7 @@ func (style *Stylesheet) processNode(node xml.Node, context *ExecutionContext) {
 		return
 	}
 	//apply template to current node
-	template.Apply(node, context, nil)
+	template.Apply(node, context, params)
 }
 
 func (style *Stylesheet) populateKeys(node xml.Node, context *ExecutionContext) {

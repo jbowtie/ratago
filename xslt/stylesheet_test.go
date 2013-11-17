@@ -154,9 +154,9 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-40-") //variable scope is global when call-template is invoked
 	runGeneralXslTest(t, "bug-41-") //also avoid overwriting global variable using with-param
 	runGeneralXslTest(t, "bug-42-") //as 40 but for apply-templates
-	//runGeneralXslTest(t, "bug-43-") //as 41 but for apply-templates
+	runGeneralXslTest(t, "bug-43-") //as 41 but for apply-templates
 	runGeneralXslTest(t, "bug-44-") // with-param
-	//runGeneralXslTest(t, "bug-45-") // with-param
+	//runGeneralXslTest(t, "bug-45-") // ensure params/variables resolve in correct order
 	runGeneralXslTest(t, "bug-46-")
 	runGeneralXslTest(t, "bug-47-")
 	runGeneralXslTest(t, "bug-48-")
