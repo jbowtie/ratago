@@ -170,17 +170,17 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-57")
 	runGeneralXslTest(t, "bug-59")
 	runGeneralXslTest(t, "bug-60") // fallback for unknown XSL element
-	//runGeneralXslTest(t, "bug-61")
+	//runGeneralXslTest(t, "bug-61") // format-number outputs NaN correctly
 	runGeneralXslTest(t, "bug-62")
-	//runGeneralXslTest(t, "bug-63")
+	//runGeneralXslTest(t, "bug-63") //resolve namespace nodes and relative paths
 	runGeneralXslTest(t, "bug-64")
-	//runGeneralXslTest(t, "bug-65")
-	//runGeneralXslTest(t, "bug-66")
+	//runGeneralXslTest(t, "bug-65") // libxslt:node-set, can't fix until document('href') works as expected
+	//runGeneralXslTest(t, "bug-66") //current()
 	runGeneralXslTest(t, "bug-68")
 	runGeneralXslTest(t, "bug-69")
 	//runGeneralXslTest(t, "bug-70") // key() - nodeset as arg 2
-	//runGeneralXslTest(t, "bug-71")
-	//runGeneralXslTest(t, "bug-72")
+	//runGeneralXslTest(t, "bug-71") //only fails due to order of NS declarations; need to review spec on that
+	runGeneralXslTest(t, "bug-72") //variables declared in RVT
 	runGeneralXslTest(t, "bug-73")
 	runGeneralXslTest(t, "bug-74")
 	//runGeneralXslTest(t, "bug-75")

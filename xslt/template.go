@@ -191,6 +191,10 @@ func (e *LiteralResultElement) Apply(node xml.Node, context *ExecutionContext) {
 	}
 	for _, c := range e.Children {
 		c.Apply(node, context)
+		switch v := c.(type) {
+		case *Variable:
+			_ = context.DeclareLocalVariable(v.Name, "", v)
+		}
 	}
 	context.OutputNode = old
 }
