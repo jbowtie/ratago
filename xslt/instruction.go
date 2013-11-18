@@ -368,9 +368,17 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			i.copyToOutput(cur, context, true)
 		}
 
-	case "apply-imports":
 	case "message":
-		fmt.Println("TODO instruction ", i.Name)
+		val, _ := i.evalChildrenAsText(node, context)
+		terminate := i.Node.Attr("terminate")
+		if terminate == "yes" {
+			//TODO: fixup error flow to terminate more gracefully
+			panic(val)
+		} else {
+			fmt.Println(val)
+		}
+	case "apply-imports":
+		fmt.Println("TODO handle xsl:apply-imports instruction")
 	default:
 		hasFallback := false
 		for _, c := range i.Children {
