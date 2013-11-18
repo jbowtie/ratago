@@ -29,6 +29,13 @@ func TestPatternRootParent(t *testing.T) {
 	compareStep(t, steps[2], OP_END, "")
 }
 
+func TestPatternRootWildcard(t *testing.T) {
+	steps := parseMatchPattern("/*")
+	compareStep(t, steps[0], OP_ALL, "*")
+	compareStep(t, steps[1], OP_ROOT, "/")
+	compareStep(t, steps[2], OP_END, "")
+}
+
 func TestPatternAncestor(t *testing.T) {
 	steps := parseMatchPattern("foo//bar")
 	compareStep(t, steps[0], OP_ELEM, "bar")
