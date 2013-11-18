@@ -91,7 +91,7 @@ func XsltDocumentFn(context xpath.VariableScope, args []interface{}) interface{}
 	switch doc := args[0].(type) {
 	case string:
 		if doc == "" {
-			return []xml.Node{c.Style.Doc}
+			return []unsafe.Pointer{c.Style.Doc.DocPtr()}
 		}
 		return nil
 	}
