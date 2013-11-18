@@ -188,22 +188,22 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-77") //handle spaces around OR
 	runGeneralXslTest(t, "bug-78")
 	runGeneralXslTest(t, "bug-79")
-	//runGeneralXslTest(t, "bug-80")
-	//runGeneralXslTest(t, "bug-81")
-	//runGeneralXslTest(t, "bug-82")
+	//runGeneralXslTest(t, "bug-80") //fails due to ordering of attributes; review, possibly edit test
+	//runGeneralXslTest(t, "bug-81") //rounding error in XPatch calculation; might be caused by CGO conversion
+	//runGeneralXslTest(t, "bug-82") //whitespace interactions; possibly not honoring global preserve-space
 	runGeneralXslTest(t, "bug-83")
 	runGeneralXslTest(t, "bug-84")
-	//runGeneralXslTest(t, "bug-86")
-	//runGeneralXslTest(t, "bug-87")
+	//runGeneralXslTest(t, "bug-86") //getting some unnecessary duplication of namespaces declarations using copy-of
+	//runGeneralXslTest(t, "bug-87") //matching on namespace node
 	runGeneralXslTest(t, "bug-88")
 	runGeneralXslTest(t, "bug-89")
-	//runGeneralXslTest(t, "bug-90")
-	//runGeneralXslTest(t, "bug-91")
-	//runGeneralXslTest(t, "bug-92")
-	//runGeneralXslTest(t, "bug-93")
-	//runGeneralXslTest(t, "bug-94")
-	//runGeneralXslTest(t, "bug-95")
-	//runGeneralXslTest(t, "bug-96")
+	//runGeneralXslTest(t, "bug-90")  // CDATA handling
+	//runGeneralXslTest(t, "bug-91") // disable-output-escaping attribute
+	//runGeneralXslTest(t, "bug-92") //libxml2 doesn't output the xs namespace here; why not?
+	//runGeneralXslTest(t, "bug-93") // presence of xsl:output in imported stylesheets should cause effective merge
+	//runGeneralXslTest(t, "bug-94") //variable/param confusion
+	//runGeneralXslTest(t, "bug-95") //format-number
+	//runGeneralXslTest(t, "bug-96") //cdata-section-elements
 	runGeneralXslTest(t, "bug-97")
 	//runGeneralXslTest(t, "bug-98")
 	//runGeneralXslTest(t, "bug-99")
@@ -246,7 +246,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-136")
 	//runGeneralXslTest(t, "bug-137")
 	runGeneralXslTest(t, "bug-138")
-	//runGeneralXslTest(t, "bug-139") // takes a very long time
+	//runGeneralXslTest(t, "bug-139") // takes an extremely long time (and eats all the memory); involves resolving DOCTYPE entities perhaps?
 	//runGeneralXslTest(t, "bug-140")
 	runGeneralXslTest(t, "bug-141")
 	//runGeneralXslTest(t, "bug-142")
