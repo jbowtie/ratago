@@ -360,6 +360,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 	case "copy-of":
 		scope := i.Node.Attr("select")
 		e := xpath.Compile(scope)
+		context.RegisterXPathNamespaces(i.Node)
 		nodes, _ := context.EvalXPathAsNodeset(node, e)
 		total := len(nodes)
 		for j, cur := range nodes {
@@ -479,6 +480,13 @@ func (i *XsltInstruction) copyToOutput(node xml.Node, context *ExecutionContext,
 		name := node.Attr("name")
 		r := context.Output.CreatePINode(name, node.Content())
 		context.OutputNode.AddChild(r)
+	case xml.XML_NAMESPACE_DECL:
+		//in theory this should work
+		//in practice it's a little complicated due to the fact
+		//that namespace declarations don't map to the node type
+		//very well
+		//will need to revisit
+		//context.OutputNode.DeclareNamespace(node.Name(), node.Content())
 	case xml.XML_ELEMENT_NODE:
 		aname := node.Name()
 		r := context.Output.CreateElementNode(aname)
