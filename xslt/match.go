@@ -174,6 +174,8 @@ func lexNodeTest(l *lexer) stateFn {
 			l.emit(OP_OR)
 			l.ignore()
 			return lexNodeTest
+		case ' ', '\t', '\r':
+			l.ignore()
 		default:
 		}
 		//switch?

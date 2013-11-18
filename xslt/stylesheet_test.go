@@ -183,9 +183,9 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-72") //variables declared in RVT
 	runGeneralXslTest(t, "bug-73")
 	runGeneralXslTest(t, "bug-74")
-	//runGeneralXslTest(t, "bug-75")
-	//runGeneralXslTest(t, "bug-76")
-	//runGeneralXslTest(t, "bug-77")
+	//runGeneralXslTest(t, "bug-75") //format-number()
+	//runGeneralXslTest(t, "bug-76") //issue with count? or variable resolution?
+	runGeneralXslTest(t, "bug-77") //handle spaces around OR
 	runGeneralXslTest(t, "bug-78")
 	runGeneralXslTest(t, "bug-79")
 	//runGeneralXslTest(t, "bug-80")
@@ -253,7 +253,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-143")
 	runGeneralXslTest(t, "bug-144")
 	//runGeneralXslTest(t, "bug-145")
-	// runGeneralXslTest(t, "bug-146") //crasher
+	//runGeneralXslTest(t, "bug-146") // funny looking key definition plus encoding issue
 	//runGeneralXslTest(t, "bug-147")
 	runGeneralXslTest(t, "bug-148")
 	runGeneralXslTest(t, "bug-149")
