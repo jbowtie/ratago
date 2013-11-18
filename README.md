@@ -13,6 +13,6 @@ TODO
 There are several tasks remaining to reach full compliance. Until these tasks are complete the API is subject to change.
 
 * Fully implement xsl:include (see tests in libxslt general suite)
-* Fully implement xsl:with-param (no tests in initial suite)
+* Fully implement xsl:message (no tests in initial suite)
 * Ensure that errors are properly progogated in Go fashion.
 
