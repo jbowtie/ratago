@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/jbowtie/ratago/xslt"
-	"github.com/moovweb/gokogiri"
 	"github.com/moovweb/gokogiri/xml"
 	"io/ioutil"
 	"os"
@@ -16,7 +15,7 @@ func xmlReadFile(filename string) (doc *xml.XmlDocument, err error) {
 	if err != nil {
 		return
 	}
-	doc, err = gokogiri.ParseXml(data)
+	doc, err = xml.Parse(data, xml.DefaultEncodingBytes, nil, xslt.XSLT_PARSE_OPTIONS, xml.DefaultEncodingBytes)
 	return
 }
 

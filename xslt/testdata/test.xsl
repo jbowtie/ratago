@@ -12,7 +12,7 @@
         <h3><xsl:text>(TITLE) </xsl:text><xsl:value-of select="@title" /></h3>
         <xsl:if test="@title">
             <xsl:apply-templates select="bar[1]" mode="correct" />
-        </xsl:if
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="bar">
