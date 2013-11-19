@@ -11,6 +11,7 @@ func (style *Stylesheet) RegisterXsltFunctions() {
 	style.Functions["key"] = XsltKey
 	style.Functions["system-property"] = XsltSystemProperty
 	style.Functions["document"] = XsltDocumentFn
+	style.Functions["unparsed-entity-uri"] = XsltUnparsedEntityUri
 	//element-available
 	//function-available - possibly internal to Gokogiri?
 	//id - see implementation in match.go
@@ -96,4 +97,35 @@ func XsltDocumentFn(context xpath.VariableScope, args []interface{}) interface{}
 		return nil
 	}
 	return nil
+}
+
+// Implementation of unparsed-entity-uri from spec
+func XsltUnparsedEntityUri(context xpath.VariableScope, args []interface{}) interface{} {
+	if len(args) < 1 {
+		return nil
+	}
+	c := context.(*ExecutionContext)
+	name := argValToString(args[0])
+	val := c.Source.UnparsedEntityURI(name)
+	return val
+}
+
+// util function because we can't assume we're actually getting a string
+func argValToString(val interface{}) (out string) {
+	if val == nil {
+		return
+	}
+	switch v := val.(type) {
+	case string:
+		return v
+	case []unsafe.Pointer:
+		if len(v) == 0 {
+			return
+		}
+		n := xml.NewNode(v[0], nil)
+		out = n.Content()
+	default:
+		out = fmt.Sprintf("%v", v)
+	}
+	return
 }

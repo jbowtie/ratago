@@ -12,6 +12,7 @@ import (
 type ExecutionContext struct {
 	Style        *Stylesheet  // The master stylesheet
 	Output       xml.Document // The output document
+	Source       xml.Document // The source input document
 	OutputNode   xml.Node     // The current output node
 	Current      xml.Node     // The current input node
 	XPathContext *xpath.XPath //the XPath context
