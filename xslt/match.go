@@ -296,7 +296,7 @@ func lexParent(l *lexer) stateFn {
 	}
 	if l.start == 0 {
 		l.emit(OP_ROOT)
-		return lexNodeTest
+		//return lexNodeTest
 	}
 	l.emit(OP_PARENT)
 	return lexNodeTest
