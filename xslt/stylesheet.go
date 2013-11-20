@@ -164,7 +164,7 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 			name := cur.Attr("name")
 			use := cur.Attr("use")
 			match := cur.Attr("match")
-			k := &Key{make(map[string]Nodeset), use, match}
+			k := &Key{make(map[string]xml.Nodeset), use, match}
 			style.Keys[name] = k
 			continue
 		}

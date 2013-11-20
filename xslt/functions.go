@@ -21,19 +21,10 @@ func (style *Stylesheet) RegisterXsltFunctions() {
 	//format-number - requires handling decimal-format
 }
 
-type Nodeset []xml.Node
-
 type Key struct {
-	nodes map[string]Nodeset
+	nodes map[string]xml.Nodeset
 	use   string
 	match string
-}
-
-func (n Nodeset) ToPointers() (pointers []unsafe.Pointer) {
-	for _, node := range n {
-		pointers = append(pointers, node.NodePtr())
-	}
-	return
 }
 
 // Implementation of key() from XSLT spec
@@ -91,7 +82,8 @@ func XsltDocumentFn(context xpath.VariableScope, args []interface{}) interface{}
 	switch doc := args[0].(type) {
 	case string:
 		if doc == "" {
-			return []unsafe.Pointer{c.Style.Doc.DocPtr()}
+			nodeset := xml.Nodeset{c.Style.Doc}
+			return nodeset.ToPointers()
 		}
 		return nil
 	}

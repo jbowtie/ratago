@@ -88,7 +88,7 @@ func (i *Variable) Apply(node xml.Node, context *ExecutionContext) {
 	}
 	context.PopStack()
 	i.Value = nil
-	var outNodes Nodeset
+	var outNodes xml.Nodeset
 	for cur := context.OutputNode.FirstChild(); cur != nil; cur = cur.NextSibling() {
 		outNodes = append(outNodes, cur)
 	}
