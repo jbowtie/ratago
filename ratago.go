@@ -15,7 +15,7 @@ func xmlReadFile(filename string) (doc *xml.XmlDocument, err error) {
 	if err != nil {
 		return
 	}
-	doc, err = xml.Parse(data, xml.DefaultEncodingBytes, nil, xslt.XSLT_PARSE_OPTIONS, xml.DefaultEncodingBytes)
+	doc, err = xml.Parse(data, xml.DefaultEncodingBytes, nil, xml.StrictParseOption, xml.DefaultEncodingBytes)
 	return
 }
 
