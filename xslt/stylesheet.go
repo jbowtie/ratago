@@ -73,6 +73,10 @@ func IsBlank(xmlnode xml.Node) bool {
 
 // ParseStylesheet compiles the stylesheet's XML representation
 // and returns a Stylesheet instance.
+//
+// The fileuri argument is used to resolve relative paths for xsl:import and xsl:include
+// instructions and should generally be the filename of the stylesheet. If you pass
+// an empty string, the working directory will be used for path resolution.
 func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, err error) {
 	style = &Stylesheet{Doc: doc,
 		NamespaceMapping: make(map[string]string),
@@ -288,7 +292,7 @@ func (style *Stylesheet) IsExcluded(prefix string) bool {
 
 // The output is not guaranteed to be well-formed XML, so the
 // serialized string is returned. Consideration is being given
-// to returning a slice of bytes.
+// to returning a slice of bytes and encoding information.
 func (style *Stylesheet) Process(doc *xml.XmlDocument, options StylesheetOptions) (out string, err error) {
 	// lookup output method, doctypes, encoding
 	// create output document with appropriate values
