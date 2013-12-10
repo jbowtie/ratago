@@ -52,11 +52,11 @@ func (context *ExecutionContext) EvalXPath(xmlNode xml.Node, data interface{}) (
 			}
 			result = output
 		case xpath.XPATH_NUMBER:
-			result, _ = xpathCtx.ResultAsNumber()
+			result, err = xpathCtx.ResultAsNumber()
 		case xpath.XPATH_BOOLEAN:
-			result, _ = xpathCtx.ResultAsBoolean()
+			result, err = xpathCtx.ResultAsBoolean()
 		default:
-			result, _ = xpathCtx.ResultAsString()
+			result, err = xpathCtx.ResultAsString()
 		}
 	default:
 		err = errors.New("Strange type passed to ExecutionContext.EvalXPath")
@@ -67,8 +67,7 @@ func (context *ExecutionContext) EvalXPath(xmlNode xml.Node, data interface{}) (
 // Register the namespaces in scope with libxml2 so that XPaths with namespaces
 // are resolved correctly.
 
-//TODO: walk up tree to get all namespaces in scope
-// libxml probably already makes this info available
+// libxml2 probably already makes this info available
 func (context *ExecutionContext) RegisterXPathNamespaces(node xml.Node) (err error) {
 	seen := make(map[string]bool)
 	for n := node; n != nil; n = n.Parent() {
