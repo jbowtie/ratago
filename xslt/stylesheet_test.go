@@ -220,7 +220,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-107")
 	runGeneralXslTest(t, "bug-108")
 	//runGeneralXslTest(t, "bug-109")
-	//runGeneralXslTest(t, "bug-110")
+	runGeneralXslTest(t, "bug-110") //generate-id()
 	//runGeneralXslTest(t, "bug-111")
 	//runGeneralXslTest(t, "bug-112")
 	runGeneralXslTest(t, "bug-113") // stylesheet and parser in ISO-8859-1

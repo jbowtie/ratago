@@ -8,17 +8,16 @@ import (
 )
 
 func (style *Stylesheet) RegisterXsltFunctions() {
+	style.Functions["document"] = XsltDocumentFn
+	style.Functions["generate-id"] = XsltGenerateId
 	style.Functions["key"] = XsltKey
 	style.Functions["system-property"] = XsltSystemProperty
-	style.Functions["document"] = XsltDocumentFn
 	style.Functions["unparsed-entity-uri"] = XsltUnparsedEntityUri
 	//element-available
 	//function-available - possibly internal to Gokogiri?
 	//id - see implementation in match.go
 	//current - need to set appropriately in context
 	//lang
-	//generate-id - just use pointer to node as string?
-	//unparsed-entity-uri - requires Gokogiri to expose API
 	//format-number - requires handling decimal-format
 }
 
@@ -91,7 +90,33 @@ func XsltDocumentFn(context xpath.VariableScope, args []interface{}) interface{}
 	return nil
 }
 
-// Implementation of unparsed-entity-uri from spec
+// Implementation of generate-id() from XSLT spec
+func XsltGenerateId(context xpath.VariableScope, args []interface{}) interface{} {
+	// should be 0 or 1 argument
+	if len(args) > 1 {
+		return nil
+	}
+
+	//c := context.(*ExecutionContext)
+	if len(args) < 1 {
+		fmt.Println("GENERATE-ID for current")
+		return "N" //id of context node
+	}
+
+	switch v := args[0].(type) {
+	case []unsafe.Pointer:
+		if len(v) == 0 {
+			return nil
+		}
+		out := fmt.Sprintf("%v", uintptr(v[0]))
+		return out
+	default:
+		return nil
+	}
+	return nil
+}
+
+// Implementation of unparsed-entity-uri() from XSLT spec
 func XsltUnparsedEntityUri(context xpath.VariableScope, args []interface{}) interface{} {
 	if len(args) < 1 {
 		return nil
