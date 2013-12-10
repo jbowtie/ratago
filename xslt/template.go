@@ -64,8 +64,13 @@ func (i *Variable) Apply(node xml.Node, context *ExecutionContext) {
 	// if @select
 	if scope != "" {
 		e := xpath.Compile(scope)
-		i.Value, _ = context.EvalXPath(node, e)
-		//fmt.Println("VARIABLE SELECT", name, i.Value)
+		var err error
+		context.RegisterXPathNamespaces(i.Node)
+		i.Value, err = context.EvalXPath(node, e)
+		if err != nil {
+			fmt.Println("Error evaluating variable", i.Name, err)
+		}
+		//fmt.Println("VARIABLE SELECT", i.Name, i.Value)
 		return
 	}
 
