@@ -97,9 +97,15 @@ func TestXsltRECexample2(t *testing.T) {
 
 //convenience function to fix up the paths before running a test
 func runGeneralXslTest(t *testing.T, xslFile string) bool {
-	xslf := fmt.Sprintf("testdata/general/%v.xsl", xslFile)
-	ii := fmt.Sprintf("testdata/docs/%v.xml", xslFile)
-	oo := fmt.Sprintf("testdata/general/%v.out", xslFile)
+	//we change into the general directory to duplicate env of libxslt test run
+	// unparsed-entity-uri() in particular returns a result relative to the
+	// current working directory.
+	pwd, _ := os.Getwd()
+	defer os.Chdir(pwd)
+	_ = os.Chdir("testdata/general")
+	xslf := fmt.Sprintf("%v.xsl", xslFile)
+	ii := fmt.Sprintf("../docs/%v.xml", xslFile)
+	oo := fmt.Sprintf("%v.out", xslFile)
 	return runXslTest(t, xslf, ii, oo)
 }
 
@@ -130,7 +136,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-18-")
 	runGeneralXslTest(t, "bug-19-")
 	runGeneralXslTest(t, "bug-20-")
-	//runGeneralXslTest(t, "bug-21-") // unparsed-entity-uri()
+	runGeneralXslTest(t, "bug-21-") // unparsed-entity-uri()
 	runGeneralXslTest(t, "bug-22-")
 	runGeneralXslTest(t, "bug-23-")
 	runGeneralXslTest(t, "bug-24-")
@@ -143,7 +149,6 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-31-")
 	runGeneralXslTest(t, "bug-32-")
 	runGeneralXslTest(t, "bug-33-")
-	//runGeneralXslTest(t, "bug-34-")
 	runGeneralXslTest(t, "bug-35-")
 	runGeneralXslTest(t, "bug-36-") //xsl:include
 	runGeneralXslTest(t, "bug-37-") //xsl:include
@@ -160,7 +165,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-48-")
 	runGeneralXslTest(t, "bug-49-") // global variable defined in terms of inner variable
 	runGeneralXslTest(t, "bug-50-")
-	//runGeneralXslTest(t, "bug-52") //unparsed-entity-uri with nodeset argument
+	runGeneralXslTest(t, "bug-52") //unparsed-entity-uri with nodeset argument
 	runGeneralXslTest(t, "bug-53") // depends on DTD processing of ATTLIST with default attribute
 	runGeneralXslTest(t, "bug-54")
 	runGeneralXslTest(t, "bug-55")
