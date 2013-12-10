@@ -2,6 +2,7 @@ package xslt
 
 import (
 	"fmt"
+	"github.com/moovweb/gokogiri/xml"
 	"io/ioutil"
 	"os"
 	"path"
@@ -17,9 +18,10 @@ func TestNaive(t *testing.T) {
 	runXslTest(t, xslFile, inputXml, outputXml)
 }
 
+// Helper where actual checking occurs
 func runXslTest(t *testing.T, xslFile, inputXmlFile, outputXmlFile string) bool {
-	style, _ := xmlReadFile(xslFile)
-	input, _ := xmlReadFile(inputXmlFile)
+	style, _ := xml.ReadFile(xslFile, xml.StrictParseOption)
+	input, _ := xml.ReadFile(inputXmlFile, xml.StrictParseOption)
 	outData, _ := ioutil.ReadFile(outputXmlFile)
 	expected := string(outData)
 	stylesheet, _ := ParseStylesheet(style, xslFile)
@@ -36,11 +38,7 @@ func runXslTest(t *testing.T, xslFile, inputXmlFile, outputXmlFile string) bool 
 	return true
 }
 
-func visit(path string, f os.FileInfo, err error) error {
-	fmt.Printf("Visited: %s\n", path)
-	return nil
-}
-
+// check whether a file exists
 func exists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -177,7 +175,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-65") // libxslt:node-set, can't fix until document('href') works as expected
 	//runGeneralXslTest(t, "bug-66") //current()
 	runGeneralXslTest(t, "bug-68")
-	//runGeneralXslTest(t, "bug-69") //fails with stricter parser
+	runGeneralXslTest(t, "bug-69") // stylesheet and input in iso-8859-1
 	//runGeneralXslTest(t, "bug-70") // key() - nodeset as arg 2
 	//runGeneralXslTest(t, "bug-71") //only fails due to order of NS declarations; need to review spec on that
 	runGeneralXslTest(t, "bug-72") //variables declared in RVT
@@ -196,7 +194,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-86") //getting some unnecessary duplication of namespaces declarations using copy-of
 	//runGeneralXslTest(t, "bug-87") //matching on namespace node
 	runGeneralXslTest(t, "bug-88")
-	//runGeneralXslTest(t, "bug-89") //fails with stricter parser
+	runGeneralXslTest(t, "bug-89") //fails with stricter parser
 	//runGeneralXslTest(t, "bug-90")  // CDATA handling
 	//runGeneralXslTest(t, "bug-91") // disable-output-escaping attribute
 	//runGeneralXslTest(t, "bug-92") //libxml2 doesn't output the xs namespace here; why not?
@@ -220,7 +218,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-110")
 	//runGeneralXslTest(t, "bug-111")
 	//runGeneralXslTest(t, "bug-112")
-	//runGeneralXslTest(t, "bug-113") //fails with stricter parser
+	runGeneralXslTest(t, "bug-113") // stylesheet and parser in ISO-8859-1
 	runGeneralXslTest(t, "bug-114")
 	//runGeneralXslTest(t, "bug-115")
 	runGeneralXslTest(t, "bug-116")
@@ -289,4 +287,16 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-180")
 	//runGeneralXslTest(t, "bug-181")
 	//runGeneralXslTest(t, "bug-182")
+}
+
+// sample usage for parse stylesheet
+func ExampleParseStylesheet() {
+	//parse the stylesheet
+	style, _ := xml.ReadFile("testdata/test.xsl", xml.StrictParseOption)
+	stylesheet, _ := ParseStylesheet(style, "testdata/test.xsl")
+
+	//process the input
+	input, _ := xml.ReadFile("testdata/test.xml", xml.StrictParseOption)
+	output, _ := stylesheet.Process(input, StylesheetOptions{false, nil})
+	fmt.Println(output)
 }
