@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/moovweb/gokogiri/xml"
 	"github.com/moovweb/gokogiri/xpath"
+	"log"
 	"path"
 	"strconv"
 	"strings"
@@ -96,13 +97,6 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 		Functions:        make(map[string]xpath.XPathFunction),
 		Variables:        make(map[string]*Variable)}
 
-	//set parent (importing stylesheet, if any)
-	//creates a namespace hash, should be able to eval in context
-	// will look at during compilation
-	//XsltGatherNamespaces(style)
-	//we need to create a compilation context for the main stylesheet
-	//push and pop from the compilation stack as we handle imported stylesheets
-
 	// register the built-in XSLT functions
 	style.RegisterXsltFunctions()
 
@@ -117,7 +111,7 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 	//get xsl:version, should be 1.0 or 2.0
 	version := cur.Attr("version")
 	if version != "1.0" {
-		fmt.Println("VERSION 1.0 expected")
+		log.Println("VERSION 1.0 expected")
 	}
 
 	//record excluded prefixes
@@ -140,9 +134,22 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 	}
 
 	//optionally optimize by removing blank nodes, combining adjacent text nodes, etc
+	err = style.parseChildren(cur, fileuri)
 
+	//xsl:import (must be first)
+	//flag non-empty text nodes, non XSL-namespaced nodes
+	//  actually registered extension namspaces are good!
+	//warn unknown XSLT element (forwards-compatible mode)
+
+	return
+}
+
+// Here we iterate through the children; this has been moved to its own function
+// to facilitate the implementation of xsl:include (where we want the children to
+// be treated as if they were part of the calling stylesheet)
+func (style *Stylesheet) parseChildren(root xml.Node, fileuri string) (err error) {
 	//iterate through children
-	for cur = cur.FirstChild(); cur != nil; cur = cur.NextSibling() {
+	for cur := root.FirstChild(); cur != nil; cur = cur.NextSibling() {
 		//skip blank nodes
 		if IsBlank(cur) {
 			continue
@@ -188,7 +195,8 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 		if IsXsltName(cur, "include") {
 			//check for recursion, multiple includes
 			loc := cur.Attr("href")
-			fmt.Println("INCLUDE", loc)
+			base := path.Dir(fileuri)
+			loc = path.Join(base, loc)
 			_, already := style.includes[loc]
 			if already {
 				panic("Multiple include detected of " + loc)
@@ -196,7 +204,20 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 			style.includes[loc] = true
 
 			//load the stylesheet
+			doc, e := xml.ReadFile(loc, xml.StrictParseOption)
+			if e != nil {
+				fmt.Println(e)
+				err = e
+				return
+			}
+			//_, _ = ParseStylesheet(doc, loc)
 			//update the including stylesheet
+			e = style.parseChildren(doc.Root(), loc)
+			if e != nil {
+				fmt.Println(e)
+				err = e
+				return
+			}
 			continue
 		}
 
@@ -270,11 +291,6 @@ func ParseStylesheet(doc *xml.XmlDocument, fileuri string) (style *Stylesheet, e
 			continue
 		}
 	}
-	//xsl:import (must be first)
-	//flag non-empty text nodes, non XSL-namespaced nodes
-	//  actually registered extension namspaces are good!
-	//warn unknown XSLT element (forwards-compatible mode)
-
 	return
 }
 

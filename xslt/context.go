@@ -205,6 +205,9 @@ func (context *ExecutionContext) ResolveVariable(name, ns string) (ret interface
 	switch val := v.Value.(type) {
 	case xml.Nodeset:
 		return unsafe.Pointer(val.ToXPathNodeset())
+	case []xml.Node:
+		nodeset := xml.Nodeset(val)
+		return unsafe.Pointer(nodeset.ToXPathNodeset())
 	default:
 		return val
 	}

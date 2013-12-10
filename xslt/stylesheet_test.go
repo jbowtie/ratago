@@ -145,8 +145,8 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-33-")
 	//runGeneralXslTest(t, "bug-34-")
 	runGeneralXslTest(t, "bug-35-")
-	//runGeneralXslTest(t, "bug-36-") //xsl:include
-	//runGeneralXslTest(t, "bug-37-") //xsl:include
+	runGeneralXslTest(t, "bug-36-") //xsl:include
+	runGeneralXslTest(t, "bug-37-") //xsl:include
 	//runGeneralXslTest(t, "bug-38-") // handle copy-of() for namespace nodes
 	runGeneralXslTest(t, "bug-39-")
 	runGeneralXslTest(t, "bug-40-") //variable scope is global when call-template is invoked
