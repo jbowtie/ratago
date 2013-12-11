@@ -120,7 +120,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-2-")
 	runGeneralXslTest(t, "bug-3-")
 	runGeneralXslTest(t, "bug-4-")
-	//runGeneralXslTest(t, "bug-5-") //seems to be an issue with for-each select=$ACTIONgrid
+	//runGeneralXslTest(t, "bug-5-") // need to implement current()
 	runGeneralXslTest(t, "bug-6-")
 	runGeneralXslTest(t, "bug-7-")
 	runGeneralXslTest(t, "bug-8-") //issue resolving namespaces in imported stylesheet
@@ -219,27 +219,27 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-106") //copy-of
 	runGeneralXslTest(t, "bug-107")
 	runGeneralXslTest(t, "bug-108")
-	//runGeneralXslTest(t, "bug-109")
+	//runGeneralXslTest(t, "bug-109") // disable-output-escaping
 	runGeneralXslTest(t, "bug-110") //generate-id()
-	//runGeneralXslTest(t, "bug-111")
-	//runGeneralXslTest(t, "bug-112")
+	//runGeneralXslTest(t, "bug-111") //exsl:node-set()
+	//runGeneralXslTest(t, "bug-112") //exsl:node-set()
 	runGeneralXslTest(t, "bug-113") // stylesheet and parser in ISO-8859-1
 	runGeneralXslTest(t, "bug-114")
-	//runGeneralXslTest(t, "bug-115")
+	//runGeneralXslTest(t, "bug-115") //exsl:node-set()
 	runGeneralXslTest(t, "bug-116")
 	//runGeneralXslTest(t, "bug-117")
-	//runGeneralXslTest(t, "bug-118")
+	//runGeneralXslTest(t, "bug-118") //copy-of
 	runGeneralXslTest(t, "bug-119")
-	//runGeneralXslTest(t, "bug-120")
+	//runGeneralXslTest(t, "bug-120") //xsl:sort with data-type; interaction with copy-of?
 	runGeneralXslTest(t, "bug-121")
-	//runGeneralXslTest(t, "bug-122")
+	//runGeneralXslTest(t, "bug-122") //namespace nodes
 	runGeneralXslTest(t, "bug-123")
-	//runGeneralXslTest(t, "bug-124")
-	//runGeneralXslTest(t, "bug-125")
-	//runGeneralXslTest(t, "bug-126")
+	//runGeneralXslTest(t, "bug-124") //namespace declared with multiple prefixes; really a bug?
+	//runGeneralXslTest(t, "bug-125") //unclear; needs further investigation
+	//runGeneralXslTest(t, "bug-126") //tests for bugs in AVT parsing
 	runGeneralXslTest(t, "bug-127")
-	//runGeneralXslTest(t, "bug-128")
-	//runGeneralXslTest(t, "bug-129")
+	//runGeneralXslTest(t, "bug-128") //multiple keys with the same name; need to look at spec
+	//runGeneralXslTest(t, "bug-129") //cdata-section-elements
 	//runGeneralXslTest(t, "bug-130")
 	//runGeneralXslTest(t, "bug-131")
 	//runGeneralXslTest(t, "bug-132")
