@@ -208,10 +208,7 @@ func (e *LiteralResultElement) Apply(node xml.Node, context *ExecutionContext) {
 func evalAVT(input string, node xml.Node, context *ExecutionContext) (out string) {
 	var start, pos int
 	var inSQlit, inDQlit bool
-	for {
-		if pos >= len(input) {
-			break
-		}
+	for pos < len(input) {
 		r, width := utf8.DecodeRuneInString(input[pos:])
 		pos += width
 		if r == '\'' {
