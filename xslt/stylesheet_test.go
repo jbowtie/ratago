@@ -240,17 +240,17 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-127")
 	//runGeneralXslTest(t, "bug-128") //multiple keys with the same name; need to look at spec
 	//runGeneralXslTest(t, "bug-129") //cdata-section-elements
-	//runGeneralXslTest(t, "bug-130")
-	//runGeneralXslTest(t, "bug-131")
-	//runGeneralXslTest(t, "bug-132")
-	//runGeneralXslTest(t, "bug-133")
-	//runGeneralXslTest(t, "bug-134")
-	//runGeneralXslTest(t, "bug-135")
+	//runGeneralXslTest(t, "bug-130") //document('href')
+	//runGeneralXslTest(t, "bug-131") // attribute-set combine import defs
+	runGeneralXslTest(t, "bug-132")
+	//runGeneralXslTest(t, "bug-133") // interaction between key, generate-id?
+	//runGeneralXslTest(t, "bug-134") //key with literal string in use
+	//runGeneralXslTest(t, "bug-135") // same as 134
 	runGeneralXslTest(t, "bug-136")
-	//runGeneralXslTest(t, "bug-137")
+	//runGeneralXslTest(t, "bug-137") // EXSLT func
 	runGeneralXslTest(t, "bug-138")
-	//runGeneralXslTest(t, "bug-139")
-	//runGeneralXslTest(t, "bug-140")
+	//runGeneralXslTest(t, "bug-139") //extra output of entity definitions (why?)
+	runGeneralXslTest(t, "bug-140") // failed due to standalone
 	runGeneralXslTest(t, "bug-141")
 	//runGeneralXslTest(t, "bug-142")
 	runGeneralXslTest(t, "bug-143")

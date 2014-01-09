@@ -42,6 +42,7 @@ type Stylesheet struct {
 	DesiredEncoding    string //encoding specified by xsl:output
 	OmitXmlDeclaration bool   //defaults to false
 	IndentOutput       bool   //defaults to false
+	Standalone         bool   //defaults to false
 	doctypeSystem      string
 	doctypePublic      string
 }
@@ -252,6 +253,10 @@ func (style *Stylesheet) parseChildren(root xml.Node, fileuri string) (err error
 			if indent == "yes" {
 				style.IndentOutput = true
 			}
+			standalone := cur.Attr("standalone")
+			if standalone == "yes" {
+				style.Standalone = true
+			}
 			encoding := cur.Attr("encoding")
 			if encoding != "" && encoding != "utf-8" {
 				//TODO: emit a warning if we do not support the encoding
@@ -367,6 +372,9 @@ func (style *Stylesheet) constructOutput(output *xml.XmlDocument, options Styles
 			out = "<?xml version=\"1.0\""
 			if style.DesiredEncoding != "" {
 				out = out + fmt.Sprintf(" encoding=\"%s\"", style.DesiredEncoding)
+			}
+			if style.Standalone {
+				out = out + " standalone=\"yes\""
 			}
 			out = out + "?>\n"
 		}
