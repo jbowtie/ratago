@@ -219,7 +219,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-106") //copy-of
 	runGeneralXslTest(t, "bug-107")
 	runGeneralXslTest(t, "bug-108")
-	//runGeneralXslTest(t, "bug-109") // disable-output-escaping
+	runGeneralXslTest(t, "bug-109") // disable-output-escaping
 	runGeneralXslTest(t, "bug-110") //generate-id()
 	//runGeneralXslTest(t, "bug-111") //exsl:node-set()
 	//runGeneralXslTest(t, "bug-112") //exsl:node-set()

@@ -219,6 +219,8 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 
 	case "value-of":
 		e := xpath.Compile(i.Node.Attr("select"))
+		disableEscaping := i.Node.Attr("disable-output-escaping") == "yes"
+
 		context.RegisterXPathNamespaces(i.Node)
 		o, _ := context.EvalXPath(node, e)
 		switch output := o.(type) {
@@ -228,6 +230,11 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 				//don't bother creating a text node for an empty string
 				if content != "" {
 					r := context.Output.CreateTextNode(content)
+					if disableEscaping {
+						fmt.Println("Disable escaping")
+						r.DisableOutputEscaping()
+						//r.SetName("textnoenc")
+					}
 					context.OutputNode.AddChild(r)
 				}
 			}
@@ -236,6 +243,9 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			context.OutputNode.AddChild(r)
 		case string:
 			r := context.Output.CreateTextNode(output)
+			if disableEscaping {
+				r.SetName("textnoenc")
+			}
 			context.OutputNode.AddChild(r)
 		}
 	case "when":
