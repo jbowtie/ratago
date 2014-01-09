@@ -192,7 +192,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-78")
 	runGeneralXslTest(t, "bug-79")
 	//runGeneralXslTest(t, "bug-80") //fails due to ordering of attributes; review, possibly edit test
-	//runGeneralXslTest(t, "bug-81") //rounding error in XPatch calculation; might be caused by CGO conversion
+	//runGeneralXslTest(t, "bug-81") //rounding error in XPath calculation; might be caused by CGO conversion
 	//runGeneralXslTest(t, "bug-82") //whitespace interactions; possibly not honoring global preserve-space
 	runGeneralXslTest(t, "bug-83")
 	runGeneralXslTest(t, "bug-84")
@@ -252,19 +252,19 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-139") //extra output of entity definitions (why?)
 	runGeneralXslTest(t, "bug-140") // failed due to standalone
 	runGeneralXslTest(t, "bug-141")
-	//runGeneralXslTest(t, "bug-142")
+	//runGeneralXslTest(t, "bug-142") //lang() function
 	runGeneralXslTest(t, "bug-143")
 	runGeneralXslTest(t, "bug-144")
-	//runGeneralXslTest(t, "bug-145")
+	runGeneralXslTest(t, "bug-145") //should result in no output (calling template that doesn't exist)
 	//runGeneralXslTest(t, "bug-146") // funny looking key definition plus encoding issue
-	//runGeneralXslTest(t, "bug-147")
+	//runGeneralXslTest(t, "bug-147") //looks like import precedence related
 	runGeneralXslTest(t, "bug-148")
 	runGeneralXslTest(t, "bug-149")
-	//runGeneralXslTest(t, "bug-150")
-	//runGeneralXslTest(t, "bug-151")
-	//runGeneralXslTest(t, "bug-152")
-	//runGeneralXslTest(t, "bug-153")
-	//runGeneralXslTest(t, "bug-154")
+	//runGeneralXslTest(t, "bug-150") //scoping of namespace definitions on literal result elements
+	runGeneralXslTest(t, "bug-151") // outputs just the declaration; should be nothing
+	//runGeneralXslTest(t, "bug-152") //libxml2 inserts an content-type meta tag; unsure why
+	//runGeneralXslTest(t, "bug-153") //document('href')
+	runGeneralXslTest(t, "bug-154") //should have no output
 	runGeneralXslTest(t, "bug-155")
 	//runGeneralXslTest(t, "bug-156")
 	runGeneralXslTest(t, "bug-157")

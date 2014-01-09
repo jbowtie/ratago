@@ -340,6 +340,18 @@ func (style *Stylesheet) Process(doc *xml.XmlDocument, options StylesheetOptions
 	return
 }
 
+func (style *Stylesheet) constructXmlDeclaration() (out string) {
+	out = "<?xml version=\"1.0\""
+	if style.DesiredEncoding != "" {
+		out = out + fmt.Sprintf(" encoding=\"%s\"", style.DesiredEncoding)
+	}
+	if style.Standalone {
+		out = out + " standalone=\"yes\""
+	}
+	out = out + "?>\n"
+	return
+}
+
 // actually produce (and possibly write) the final output
 func (style *Stylesheet) constructOutput(output *xml.XmlDocument, options StylesheetOptions) (out string, err error) {
 	//if not explicitly set, spec requires us to check for html
@@ -367,18 +379,11 @@ func (style *Stylesheet) constructOutput(output *xml.XmlDocument, options Styles
 	}
 
 	// create the XML declaration depending on xsl:output settings
+	decl := ""
 	if outputType == "xml" {
 		if !style.OmitXmlDeclaration {
-			out = "<?xml version=\"1.0\""
-			if style.DesiredEncoding != "" {
-				out = out + fmt.Sprintf(" encoding=\"%s\"", style.DesiredEncoding)
-			}
-			if style.Standalone {
-				out = out + " standalone=\"yes\""
-			}
-			out = out + "?>\n"
+			decl = style.constructXmlDeclaration()
 		}
-		out = out + docType
 		format := xml.XML_SAVE_NO_DECL | xml.XML_SAVE_AS_XML
 		if options.IndentOutput || style.IndentOutput {
 			format = format | xml.XML_SAVE_FORMAT
@@ -395,7 +400,9 @@ func (style *Stylesheet) constructOutput(output *xml.XmlDocument, options Styles
 				out = out + string(b[:size])
 			}
 		}
-		out = out + "\n"
+		if out != "" {
+			out = decl + docType + out + "\n"
+		}
 	}
 	if outputType == "html" {
 		out = docType
