@@ -13,6 +13,9 @@ func (style *Stylesheet) RegisterXsltFunctions() {
 	style.Functions["key"] = XsltKey
 	style.Functions["system-property"] = XsltSystemProperty
 	style.Functions["unparsed-entity-uri"] = XsltUnparsedEntityUri
+	//style.Functions["current"] = XsltCurrent
+	//style.Functions["id"] = XsltId
+	//style.Functions["lang"] = XsltLang
 	//element-available
 	//function-available - possibly internal to Gokogiri?
 	//id - see implementation in match.go
@@ -85,7 +88,21 @@ func XsltDocumentFn(context xpath.VariableScope, args []interface{}) interface{}
 			nodeset := xml.Nodeset{c.Style.Doc}
 			return nodeset.ToPointers()
 		}
+		input := c.FetchInputDocument(doc, false)
+		if input != nil {
+			nodeset := xml.Nodeset{input.Root()}
+			return nodeset.ToPointers()
+		}
 		return nil
+	case []unsafe.Pointer:
+		n := xml.NewNode(doc[0], nil)
+		location := n.Content()
+		input := c.FetchInputDocument(location, true)
+		if input != nil {
+			nodeset := xml.Nodeset{input.Root()}
+			return nodeset.ToPointers()
+		}
+		fmt.Println("DOCUMENT", location)
 	}
 	return nil
 }

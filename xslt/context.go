@@ -3,22 +3,25 @@ package xslt
 import (
 	"container/list"
 	"errors"
+	"fmt"
 	"github.com/moovweb/gokogiri/xml"
 	"github.com/moovweb/gokogiri/xpath"
+	"path/filepath"
 	"strings"
 	"unsafe"
 )
 
 // ExecutionContext is passed to XSLT instructions during processing.
 type ExecutionContext struct {
-	Style        *Stylesheet  // The master stylesheet
-	Output       xml.Document // The output document
-	Source       xml.Document // The source input document
-	OutputNode   xml.Node     // The current output node
-	Current      xml.Node     // The current input node
-	XPathContext *xpath.XPath //the XPath context
-	Mode         string       //The current template mode
-	Stack        list.List
+	Style          *Stylesheet             // The master stylesheet
+	Output         xml.Document            // The output document
+	Source         xml.Document            // The source input document
+	OutputNode     xml.Node                // The current output node
+	Current        xml.Node                // The current input node
+	XPathContext   *xpath.XPath            //the XPath context
+	Mode           string                  //The current template mode
+	Stack          list.List               //stack used for scoping local variables
+	InputDocuments map[string]xml.Document //additional input documents via document()
 }
 
 func (context *ExecutionContext) EvalXPath(xmlNode xml.Node, data interface{}) (result interface{}, err error) {
@@ -292,6 +295,7 @@ func (context *ExecutionContext) DefaultNamespace(node xml.Node) string {
 	return ""
 }
 
+// Propogate namespaces to the root of the output document
 func (context *ExecutionContext) DeclareStylesheetNamespacesIfRoot(node xml.Node) {
 	if context.OutputNode.NodeType() != xml.XML_DOCUMENT_NODE {
 		return
@@ -306,4 +310,35 @@ func (context *ExecutionContext) DeclareStylesheetNamespacesIfRoot(node xml.Node
 			}
 		}
 	}
+}
+
+func (context *ExecutionContext) FetchInputDocument(loc string, relativeToSource bool) (doc xml.Document) {
+	//create the map if needed
+	if context.InputDocuments == nil {
+		context.InputDocuments = make(map[string]xml.Document)
+	}
+
+	// rely on caller to tell us how to resolve relative paths
+	base := ""
+	if relativeToSource {
+		base, _ = filepath.Abs(filepath.Dir(context.Source.Uri()))
+	} else {
+		base, _ = filepath.Abs(filepath.Dir(context.Style.Doc.Uri()))
+	}
+	resolvedLoc := filepath.Join(base, loc)
+
+	//if abspath in map return existing document
+	doc, ok := context.InputDocuments[resolvedLoc]
+	if ok {
+		return
+	}
+
+	//else load the document and add to map
+	doc, e := xml.ReadFile(resolvedLoc, xml.StrictParseOption)
+	if e != nil {
+		fmt.Println(e)
+		return
+	}
+	context.InputDocuments[resolvedLoc] = doc
+	return
 }

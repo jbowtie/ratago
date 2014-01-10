@@ -144,7 +144,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-26-")
 	runGeneralXslTest(t, "bug-27-")
 	runGeneralXslTest(t, "bug-28-")
-	// runGeneralXslTest(t, "bug-29-") // document('href'); need to resolve to new source document
+	runGeneralXslTest(t, "bug-29-") // document('href'); need to resolve to new source document
 	runGeneralXslTest(t, "bug-30-")
 	runGeneralXslTest(t, "bug-31-")
 	runGeneralXslTest(t, "bug-32-")
@@ -240,7 +240,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-127")
 	//runGeneralXslTest(t, "bug-128") //multiple keys with the same name; need to look at spec
 	//runGeneralXslTest(t, "bug-129") //cdata-section-elements
-	//runGeneralXslTest(t, "bug-130") //document('href')
+	//runGeneralXslTest(t, "bug-130") //document('href') and import
 	//runGeneralXslTest(t, "bug-131") // attribute-set combine import defs
 	runGeneralXslTest(t, "bug-132")
 	//runGeneralXslTest(t, "bug-133") // interaction between key, generate-id?
@@ -263,7 +263,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-150") //scoping of namespace definitions on literal result elements
 	runGeneralXslTest(t, "bug-151") // outputs just the declaration; should be nothing
 	//runGeneralXslTest(t, "bug-152") //libxml2 inserts an content-type meta tag; unsure why
-	//runGeneralXslTest(t, "bug-153") //document('href')
+	//runGeneralXslTest(t, "bug-153") //document('href') and current()
 	runGeneralXslTest(t, "bug-154") //should have no output
 	runGeneralXslTest(t, "bug-155")
 	//runGeneralXslTest(t, "bug-156")
