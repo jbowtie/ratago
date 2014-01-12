@@ -342,6 +342,7 @@ func (template *Template) Apply(node xml.Node, context *ExecutionContext, params
 	// if forwards-compatible
 	//   apply fallback
 	for _, c := range template.Children {
+		context.Current = node
 		c.Apply(node, context)
 		switch v := c.(type) {
 		case *Variable:

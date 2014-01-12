@@ -588,7 +588,7 @@ func (style *Stylesheet) populateKeys(node xml.Node, context *ExecutionContext) 
 		matches := CompileMatch(key.match, nil)
 		hasMatch := false
 		for _, m := range matches {
-			if m.EvalMatch(node, "", nil) {
+			if m.EvalMatch(node, "", context) {
 				hasMatch = true
 				break
 			}

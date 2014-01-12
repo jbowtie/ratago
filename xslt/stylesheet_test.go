@@ -266,32 +266,32 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-153") //document('href') and current()
 	runGeneralXslTest(t, "bug-154") //should have no output
 	runGeneralXslTest(t, "bug-155")
-	//runGeneralXslTest(t, "bug-156")
+	runGeneralXslTest(t, "bug-156")
 	runGeneralXslTest(t, "bug-157")
-	//runGeneralXslTest(t, "bug-158")
-	//runGeneralXslTest(t, "bug-159")
-	//runGeneralXslTest(t, "bug-160")
+	runGeneralXslTest(t, "bug-158")
+	//runGeneralXslTest(t, "bug-159") //escape entities appropriately if encoding=ascii
+	//runGeneralXslTest(t, "bug-160") // match criteria seems to be the issue here
 	runGeneralXslTest(t, "bug-161")
 	runGeneralXslTest(t, "bug-163")
 	runGeneralXslTest(t, "bug-164")
-	//runGeneralXslTest(t, "bug-165")
-	//runGeneralXslTest(t, "bug-166") //generate-id
+	//runGeneralXslTest(t, "bug-165") //xpath with unresolvable variable in predicate; differs in number of blank lines produced
+	//runGeneralXslTest(t, "bug-166") //need to look closer; slow and much output!
 	runGeneralXslTest(t, "bug-167")
-	//runGeneralXslTest(t, "bug-168")
-	//runGeneralXslTest(t, "bug-169")
+	//runGeneralXslTest(t, "bug-168") //looks like AVT torture test
+	//runGeneralXslTest(t, "bug-169") // not selecting correct output encoding?
 	runGeneralXslTest(t, "bug-170")
 	runGeneralXslTest(t, "bug-171")
-	//runGeneralXslTest(t, "bug-172")
-	//runGeneralXslTest(t, "bug-173")
-	//runGeneralXslTest(t, "bug-174")
-	//runGeneralXslTest(t, "bug-175")
+	//runGeneralXslTest(t, "bug-172") //seems to be bug in xsl:choose (matches when test but no output)
+	//runGeneralXslTest(t, "bug-173") //extra newline on output?
+	//runGeneralXslTest(t, "bug-174") //exslt:func
+	//runGeneralXslTest(t, "bug-175") //wrong output encoding/doctype for html output
 	runGeneralXslTest(t, "bug-176")
-	//runGeneralXslTest(t, "bug-177")
-	//runGeneralXslTest(t, "bug-178")
-	//runGeneralXslTest(t, "bug-179")
-	//runGeneralXslTest(t, "bug-180")
-	//runGeneralXslTest(t, "bug-181")
-	//runGeneralXslTest(t, "bug-182")
+	//runGeneralXslTest(t, "bug-177") //should not create namespace declaration for built-in xml namespace
+	//runGeneralXslTest(t, "bug-178") //exslt:func
+	//runGeneralXslTest(t, "bug-179") // xsl:element/@namespace don't need to explicitly create namespace already in scope
+	//runGeneralXslTest(t, "bug-180") //expects no output
+	//runGeneralXslTest(t, "bug-181") //xsl:text missing from output
+	//runGeneralXslTest(t, "bug-182") //text()[2] should match something
 }
 
 // sample usage for parse stylesheet

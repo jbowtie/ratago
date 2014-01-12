@@ -38,6 +38,7 @@ func (context *ExecutionContext) EvalXPath(xmlNode xml.Node, data interface{}) (
 	case *xpath.Expression:
 		xpathCtx := context.XPathContext
 		xpathCtx.SetResolver(context)
+		xpathCtx.SetContextNode(context.Current.NodePtr())
 		err := xpathCtx.Evaluate(xmlNode.NodePtr(), data)
 		if err != nil {
 			return nil, err

@@ -13,7 +13,7 @@ func (style *Stylesheet) RegisterXsltFunctions() {
 	style.Functions["key"] = XsltKey
 	style.Functions["system-property"] = XsltSystemProperty
 	style.Functions["unparsed-entity-uri"] = XsltUnparsedEntityUri
-	//style.Functions["current"] = XsltCurrent
+	style.Functions["current"] = XsltCurrent
 	//style.Functions["id"] = XsltId
 	//style.Functions["lang"] = XsltLang
 	//element-available
@@ -142,6 +142,13 @@ func XsltUnparsedEntityUri(context xpath.VariableScope, args []interface{}) inte
 	name := argValToString(args[0])
 	val := c.Source.UnparsedEntityURI(name)
 	return val
+}
+
+// Implementation of current() from XSLT spec
+func XsltCurrent(context xpath.VariableScope, args []interface{}) interface{} {
+	c := context.(*ExecutionContext)
+	fmt.Println("CURRENT", c.Current)
+	return c.Current
 }
 
 // util function because we can't assume we're actually getting a string
