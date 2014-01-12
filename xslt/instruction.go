@@ -205,7 +205,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 					break
 				}
 			}
-			if !dfound {
+			if !dfound && ahref != XML_NAMESPACE {
 				//TODO: increment val of generated prefix
 				context.OutputNode.DeclareNamespace("ns_1", ahref)
 			}

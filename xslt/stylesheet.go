@@ -12,6 +12,7 @@ import (
 )
 
 const XSLT_NAMESPACE = "http://www.w3.org/1999/XSL/Transform"
+const XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace"
 
 // Stylesheet is an XSLT 1.0 processor.
 type Stylesheet struct {

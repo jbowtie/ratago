@@ -262,7 +262,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-149")
 	//runGeneralXslTest(t, "bug-150") //scoping of namespace definitions on literal result elements
 	runGeneralXslTest(t, "bug-151") // outputs just the declaration; should be nothing
-	//runGeneralXslTest(t, "bug-152") //libxml2 inserts an content-type meta tag; unsure why
+	//runGeneralXslTest(t, "bug-152") //libxml2 inserts a content-type meta tag; unsure why
 	//runGeneralXslTest(t, "bug-153") //document('href') and current()
 	runGeneralXslTest(t, "bug-154") //should have no output
 	runGeneralXslTest(t, "bug-155")
@@ -286,7 +286,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-174") //exslt:func
 	//runGeneralXslTest(t, "bug-175") //wrong output encoding/doctype for html output
 	runGeneralXslTest(t, "bug-176")
-	//runGeneralXslTest(t, "bug-177") //should not create namespace declaration for built-in xml namespace
+	runGeneralXslTest(t, "bug-177") //should not create namespace declaration for built-in xml namespace
 	//runGeneralXslTest(t, "bug-178") //exslt:func
 	//runGeneralXslTest(t, "bug-179") // xsl:element/@namespace don't need to explicitly create namespace already in scope
 	//runGeneralXslTest(t, "bug-180") //expects no output
