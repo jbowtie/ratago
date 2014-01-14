@@ -17,7 +17,7 @@ type ExecutionContext struct {
 	Output         xml.Document                // The output document
 	Source         xml.Document                // The source input document
 	OutputNode     xml.Node                    // The current output node
-	Current        xml.Node                    // The current input node
+	Current        xml.Node                    // The node that will be returned for "current()"
 	XPathContext   *xpath.XPath                //the XPath context
 	Mode           string                      //The current template mode
 	Stack          list.List                   //stack used for scoping local variables

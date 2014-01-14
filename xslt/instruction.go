@@ -358,6 +358,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		for j, cur := range nodes {
 			context.PushStack()
 			context.XPathContext.SetContextPosition(j+1, total)
+			context.Current = cur
 			for _, c := range i.Children {
 				c.Apply(cur, context)
 				switch v := c.(type) {
