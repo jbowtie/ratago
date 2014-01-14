@@ -140,7 +140,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-22-")
 	runGeneralXslTest(t, "bug-23-")
 	runGeneralXslTest(t, "bug-24-")
-	//runGeneralXslTest(t, "bug-25-") // encoding attr when UTF-8 explictly specified in doc
+	runGeneralXslTest(t, "bug-25-") // encoding attr when UTF-8 explictly specified in doc
 	runGeneralXslTest(t, "bug-26-")
 	runGeneralXslTest(t, "bug-27-")
 	runGeneralXslTest(t, "bug-28-")
@@ -177,7 +177,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-62")
 	//runGeneralXslTest(t, "bug-63") //resolve namespace nodes and relative paths
 	runGeneralXslTest(t, "bug-64")
-	//runGeneralXslTest(t, "bug-65") // libxslt:node-set, can't fix until document('href') works as expected
+	//runGeneralXslTest(t, "bug-65") // libxslt:node-set
 	runGeneralXslTest(t, "bug-66") //current()
 	runGeneralXslTest(t, "bug-68")
 	runGeneralXslTest(t, "bug-69") // stylesheet and input in iso-8859-1
@@ -187,7 +187,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-73")
 	runGeneralXslTest(t, "bug-74")
 	//runGeneralXslTest(t, "bug-75") //format-number()
-	//runGeneralXslTest(t, "bug-76") //issue with count? or variable resolution?
+	runGeneralXslTest(t, "bug-76") //issue with count? or variable resolution?
 	runGeneralXslTest(t, "bug-77") //handle spaces around OR
 	runGeneralXslTest(t, "bug-78")
 	runGeneralXslTest(t, "bug-79")
@@ -206,7 +206,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-93") // presence of xsl:output in imported stylesheets should cause effective merge
 	//runGeneralXslTest(t, "bug-94") //variable/param confusion
 	//runGeneralXslTest(t, "bug-95") //format-number
-	//runGeneralXslTest(t, "bug-96") //cdata-section-elements
+	runGeneralXslTest(t, "bug-96") //cdata-section-elements
 	runGeneralXslTest(t, "bug-97")
 	//runGeneralXslTest(t, "bug-98")
 	//runGeneralXslTest(t, "bug-99")

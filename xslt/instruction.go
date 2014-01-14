@@ -529,5 +529,11 @@ func (i *XsltInstruction) copyToOutput(node xml.Node, context *ExecutionContext,
 			}
 		}
 		context.OutputNode = old
+	case xml.XML_DOCUMENT_NODE:
+		if recursive {
+			for cur := node.FirstChild(); cur != nil; cur = cur.NextSibling() {
+				i.copyToOutput(cur, context, recursive)
+			}
+		}
 	}
 }
