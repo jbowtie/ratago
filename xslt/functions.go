@@ -8,20 +8,17 @@ import (
 )
 
 func (style *Stylesheet) RegisterXsltFunctions() {
-	style.Functions["document"] = XsltDocumentFn
-	style.Functions["generate-id"] = XsltGenerateId
-	style.Functions["key"] = XsltKey
-	style.Functions["system-property"] = XsltSystemProperty
-	style.Functions["unparsed-entity-uri"] = XsltUnparsedEntityUri
-	style.Functions["current"] = XsltCurrent
-	//style.Functions["id"] = XsltId
-	//style.Functions["lang"] = XsltLang
-	//element-available
-	//function-available - possibly internal to Gokogiri?
-	//id - see implementation in match.go
-	//current - need to set appropriately in context
-	//lang
+	style.Functions["{}document"] = XsltDocumentFn
+	style.Functions["{}generate-id"] = XsltGenerateId
+	style.Functions["{}key"] = XsltKey
+	style.Functions["{}system-property"] = XsltSystemProperty
+	style.Functions["{}unparsed-entity-uri"] = XsltUnparsedEntityUri
+	style.Functions["{}current"] = XsltCurrent
+	style.Functions["{}element-available"] = XsltElementAvailable
+	style.Functions["{}function-available"] = XsltFunctionAvailable
 	//format-number - requires handling decimal-format
+
+	// id and lang are built into libxml2, don't need to be registered
 }
 
 type Key struct {
@@ -149,6 +146,22 @@ func XsltCurrent(context xpath.VariableScope, args []interface{}) interface{} {
 	c := context.(*ExecutionContext)
 	n := xml.Nodeset{c.Current}
 	return n.ToPointers()
+}
+
+// Implementation of function-available() from XSLT spec
+func XsltFunctionAvailable(context xpath.VariableScope, args []interface{}) interface{} {
+	if len(args) < 1 {
+		return nil
+	}
+	c := context.(*ExecutionContext)
+	qname := args[0].(string)
+	//TODO: resolve namespace of argument
+	return c.IsFunctionRegistered("", qname)
+}
+
+// Implementation of element-available() from XSLT spec
+func XsltElementAvailable(context xpath.VariableScope, args []interface{}) interface{} {
+	return false
 }
 
 // util function because we can't assume we're actually getting a string

@@ -252,7 +252,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-139") //extra output of entity definitions (why?)
 	runGeneralXslTest(t, "bug-140") // failed due to standalone
 	runGeneralXslTest(t, "bug-141")
-	//runGeneralXslTest(t, "bug-142") //lang() function
+	//runGeneralXslTest(t, "bug-142") //lang() function doing strange things?
 	runGeneralXslTest(t, "bug-143")
 	runGeneralXslTest(t, "bug-144")
 	runGeneralXslTest(t, "bug-145") //should result in no output (calling template that doesn't exist)

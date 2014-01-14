@@ -279,12 +279,14 @@ func (context *ExecutionContext) PopStack() {
 }
 
 func (context *ExecutionContext) IsFunctionRegistered(name, ns string) bool {
-	_, ok := context.Style.Functions[name]
+	qname := fmt.Sprintf("{%s}%s", ns, name)
+	_, ok := context.Style.Functions[qname]
 	return ok
 }
 
 func (context *ExecutionContext) ResolveFunction(name, ns string) xpath.XPathFunction {
-	f, ok := context.Style.Functions[name]
+	qname := fmt.Sprintf("{%s}%s", ns, name)
+	f, ok := context.Style.Functions[qname]
 	if ok {
 		return f
 	}
