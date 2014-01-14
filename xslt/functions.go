@@ -125,7 +125,7 @@ func XsltGenerateId(context xpath.VariableScope, args []interface{}) interface{}
 		if len(v) == 0 {
 			return nil
 		}
-		out := fmt.Sprintf("%v", uintptr(v[0]))
+		out := fmt.Sprintf("N%v", uintptr(v[0]))
 		return out
 	default:
 		return nil
