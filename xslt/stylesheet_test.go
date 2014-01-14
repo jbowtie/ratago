@@ -263,7 +263,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-150") //scoping of namespace definitions on literal result elements
 	runGeneralXslTest(t, "bug-151") // outputs just the declaration; should be nothing
 	//runGeneralXslTest(t, "bug-152") //libxml2 inserts a content-type meta tag; unsure why
-	//runGeneralXslTest(t, "bug-153") //document('href') and current()
+	runGeneralXslTest(t, "bug-153") //document('href') and current()
 	runGeneralXslTest(t, "bug-154") //should have no output
 	runGeneralXslTest(t, "bug-155")
 	runGeneralXslTest(t, "bug-156")

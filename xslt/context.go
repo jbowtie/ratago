@@ -13,15 +13,15 @@ import (
 
 // ExecutionContext is passed to XSLT instructions during processing.
 type ExecutionContext struct {
-	Style          *Stylesheet             // The master stylesheet
-	Output         xml.Document            // The output document
-	Source         xml.Document            // The source input document
-	OutputNode     xml.Node                // The current output node
-	Current        xml.Node                // The current input node
-	XPathContext   *xpath.XPath            //the XPath context
-	Mode           string                  //The current template mode
-	Stack          list.List               //stack used for scoping local variables
-	InputDocuments map[string]xml.Document //additional input documents via document()
+	Style          *Stylesheet                 // The master stylesheet
+	Output         xml.Document                // The output document
+	Source         xml.Document                // The source input document
+	OutputNode     xml.Node                    // The current output node
+	Current        xml.Node                    // The current input node
+	XPathContext   *xpath.XPath                //the XPath context
+	Mode           string                      //The current template mode
+	Stack          list.List                   //stack used for scoping local variables
+	InputDocuments map[string]*xml.XmlDocument //additional input documents via document()
 }
 
 func (context *ExecutionContext) EvalXPath(xmlNode xml.Node, data interface{}) (result interface{}, err error) {
@@ -38,7 +38,6 @@ func (context *ExecutionContext) EvalXPath(xmlNode xml.Node, data interface{}) (
 	case *xpath.Expression:
 		xpathCtx := context.XPathContext
 		xpathCtx.SetResolver(context)
-		xpathCtx.SetContextNode(context.Current.NodePtr())
 		err := xpathCtx.Evaluate(xmlNode.NodePtr(), data)
 		if err != nil {
 			return nil, err
@@ -313,10 +312,10 @@ func (context *ExecutionContext) DeclareStylesheetNamespacesIfRoot(node xml.Node
 	}
 }
 
-func (context *ExecutionContext) FetchInputDocument(loc string, relativeToSource bool) (doc xml.Document) {
+func (context *ExecutionContext) FetchInputDocument(loc string, relativeToSource bool) (doc *xml.XmlDocument) {
 	//create the map if needed
 	if context.InputDocuments == nil {
-		context.InputDocuments = make(map[string]xml.Document)
+		context.InputDocuments = make(map[string]*xml.XmlDocument)
 	}
 
 	// rely on caller to tell us how to resolve relative paths

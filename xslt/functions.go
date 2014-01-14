@@ -90,7 +90,7 @@ func XsltDocumentFn(context xpath.VariableScope, args []interface{}) interface{}
 		}
 		input := c.FetchInputDocument(doc, false)
 		if input != nil {
-			nodeset := xml.Nodeset{input.Root()}
+			nodeset := xml.Nodeset{input}
 			return nodeset.ToPointers()
 		}
 		return nil
@@ -99,7 +99,7 @@ func XsltDocumentFn(context xpath.VariableScope, args []interface{}) interface{}
 		location := n.Content()
 		input := c.FetchInputDocument(location, true)
 		if input != nil {
-			nodeset := xml.Nodeset{input.Root()}
+			nodeset := xml.Nodeset{input}
 			return nodeset.ToPointers()
 		}
 		fmt.Println("DOCUMENT", location)
@@ -147,8 +147,8 @@ func XsltUnparsedEntityUri(context xpath.VariableScope, args []interface{}) inte
 // Implementation of current() from XSLT spec
 func XsltCurrent(context xpath.VariableScope, args []interface{}) interface{} {
 	c := context.(*ExecutionContext)
-	fmt.Println("CURRENT", c.Current)
-	return c.Current
+	n := xml.Nodeset{c.Current}
+	return n.ToPointers()
 }
 
 // util function because we can't assume we're actually getting a string
