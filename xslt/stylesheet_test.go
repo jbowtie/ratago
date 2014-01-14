@@ -178,7 +178,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-63") //resolve namespace nodes and relative paths
 	runGeneralXslTest(t, "bug-64")
 	//runGeneralXslTest(t, "bug-65") // libxslt:node-set, can't fix until document('href') works as expected
-	//runGeneralXslTest(t, "bug-66") //current()
+	runGeneralXslTest(t, "bug-66") //current()
 	runGeneralXslTest(t, "bug-68")
 	runGeneralXslTest(t, "bug-69") // stylesheet and input in iso-8859-1
 	//runGeneralXslTest(t, "bug-70") // key() - nodeset as arg 2
@@ -201,7 +201,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-88")
 	runGeneralXslTest(t, "bug-89") //fails with stricter parser
 	//runGeneralXslTest(t, "bug-90")  // CDATA handling
-	//runGeneralXslTest(t, "bug-91") // disable-output-escaping attribute
+	runGeneralXslTest(t, "bug-91") // disable-output-escaping attribute
 	//runGeneralXslTest(t, "bug-92") //libxml2 doesn't output the xs namespace here; why not?
 	//runGeneralXslTest(t, "bug-93") // presence of xsl:output in imported stylesheets should cause effective merge
 	//runGeneralXslTest(t, "bug-94") //variable/param confusion
@@ -240,7 +240,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-127")
 	//runGeneralXslTest(t, "bug-128") //multiple keys with the same name; need to look at spec
 	//runGeneralXslTest(t, "bug-129") //cdata-section-elements
-	//runGeneralXslTest(t, "bug-130") //document('href') and import
+	//runGeneralXslTest(t, "bug-130") //document('href') and import; different default namespace in imported stylesheet
 	//runGeneralXslTest(t, "bug-131") // attribute-set combine import defs
 	runGeneralXslTest(t, "bug-132")
 	//runGeneralXslTest(t, "bug-133") // interaction between key, generate-id?
