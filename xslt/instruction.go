@@ -229,29 +229,12 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		disableEscaping := i.Node.Attr("disable-output-escaping") == "yes"
 
 		context.RegisterXPathNamespaces(i.Node)
-		o, _ := context.EvalXPath(node, e)
-		switch output := o.(type) {
-		case []xml.Node:
-			if len(output) > 0 {
-				content := output[0].Content()
-				//don't bother creating a text node for an empty string
-				if content != "" {
-					r := context.Output.CreateTextNode(content)
-					if disableEscaping {
-						fmt.Println("Disable escaping")
-						r.DisableOutputEscaping()
-						//r.SetName("textnoenc")
-					}
-					context.OutputNode.AddChild(r)
-				}
-			}
-		case float64:
-			r := context.Output.CreateTextNode(fmt.Sprintf("%v", output))
-			context.OutputNode.AddChild(r)
-		case string:
-			r := context.Output.CreateTextNode(output)
+		content, _ := context.EvalXPathAsString(node, e)
+		//don't bother creating a text node for an empty string
+		if content != "" {
+			r := context.Output.CreateTextNode(content)
 			if disableEscaping {
-				r.SetName("textnoenc")
+				r.DisableOutputEscaping()
 			}
 			context.OutputNode.AddChild(r)
 		}

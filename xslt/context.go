@@ -134,6 +134,15 @@ func (context *ExecutionContext) EvalXPathAsBoolean(xmlNode xml.Node, data inter
 	return
 }
 
+func (context *ExecutionContext) EvalXPathAsString(xmlNode xml.Node, data interface{}) (result string, err error) {
+	_, err = context.EvalXPath(xmlNode, data)
+	if err != nil {
+		return
+	}
+	result, err = context.XPathContext.ResultAsString()
+	return
+}
+
 // ChildrenOf returns the node children, ignoring any whitespace-only text nodes that
 // are stripped by strip-space or xml:space
 func (context *ExecutionContext) ChildrenOf(node xml.Node) (children []xml.Node) {
