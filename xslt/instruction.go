@@ -103,10 +103,14 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			i.Sort(nodes, context)
 		}
 		total := len(nodes)
+		oldpos, oldtotal := context.XPathContext.GetContextPosition()
+		oldcurr := context.Current
 		for i, cur := range nodes {
 			context.XPathContext.SetContextPosition(i+1, total)
 			context.Style.processNode(cur, context, params)
 		}
+		context.XPathContext.SetContextPosition(oldpos, oldtotal)
+		context.Current = oldcurr
 	case "number":
 		i.numbering(node, context)
 
