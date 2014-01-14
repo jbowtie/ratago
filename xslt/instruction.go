@@ -288,14 +288,17 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 
 	case "choose":
 		for _, c := range i.Children {
-			if c.(*XsltInstruction).Node.Name() == "when" {
-				xp := xpath.Compile(c.(*XsltInstruction).Node.Attr("test"))
+			inst := c.(*XsltInstruction)
+			if inst.Node.Name() == "when" {
+				xp := xpath.Compile(inst.Node.Attr("test"))
 				if context.EvalXPathAsBoolean(node, xp) {
-					c.Apply(node, context)
+					for _, wc := range inst.Children {
+						wc.Apply(node, context)
+					}
 					break
 				}
 			} else {
-				c.Apply(node, context)
+				inst.Apply(node, context)
 			}
 		}
 	case "copy":

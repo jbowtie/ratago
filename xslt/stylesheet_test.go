@@ -120,7 +120,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-2-")
 	runGeneralXslTest(t, "bug-3-")
 	runGeneralXslTest(t, "bug-4-")
-	//runGeneralXslTest(t, "bug-5-") // need to implement current()
+	//runGeneralXslTest(t, "bug-5-") // rounding issues outputting numbers; UTF-8 casing?
 	runGeneralXslTest(t, "bug-6-")
 	runGeneralXslTest(t, "bug-7-")
 	runGeneralXslTest(t, "bug-8-") //issue resolving namespaces in imported stylesheet
@@ -281,7 +281,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-169") // not selecting correct output encoding?
 	runGeneralXslTest(t, "bug-170")
 	runGeneralXslTest(t, "bug-171")
-	//runGeneralXslTest(t, "bug-172") //seems to be bug in xsl:choose (matches when test but no output)
+	runGeneralXslTest(t, "bug-172") //seems to be bug in xsl:choose (matches when test but no output)
 	//runGeneralXslTest(t, "bug-173") //extra newline on output?
 	//runGeneralXslTest(t, "bug-174") //exslt:func
 	//runGeneralXslTest(t, "bug-175") //wrong output encoding/doctype for html output
