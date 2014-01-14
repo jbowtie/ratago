@@ -82,11 +82,14 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			}
 			total := len(children)
 			oldpos, oldtotal := context.XPathContext.GetContextPosition()
+			oldcurr := context.Current
 			for i, cur := range children {
 				context.XPathContext.SetContextPosition(i+1, total)
+				//processNode will update Context.Current whenever a template is invoked
 				context.Style.processNode(cur, context, params)
 			}
 			context.XPathContext.SetContextPosition(oldpos, oldtotal)
+			context.Current = oldcurr
 			return
 		}
 		context.RegisterXPathNamespaces(i.Node)
@@ -355,6 +358,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			i.Sort(nodes, context)
 		}
 		total := len(nodes)
+		old_curr := context.Current
 		for j, cur := range nodes {
 			context.PushStack()
 			context.XPathContext.SetContextPosition(j+1, total)
@@ -368,6 +372,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			}
 			context.PopStack()
 		}
+		context.Current = old_curr
 	case "copy-of":
 		scope := i.Node.Attr("select")
 		e := xpath.Compile(scope)
