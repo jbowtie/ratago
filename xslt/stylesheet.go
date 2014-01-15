@@ -306,6 +306,11 @@ func (style *Stylesheet) IsExcluded(prefix string) bool {
 			return true
 		}
 	}
+	for _, p := range style.ExtensionPrefixes {
+		if p == prefix {
+			return true
+		}
+	}
 	return false
 }
 

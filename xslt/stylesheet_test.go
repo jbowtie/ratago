@@ -195,11 +195,11 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-78")
 	runGeneralXslTest(t, "bug-79")
 	//runGeneralXslTest(t, "bug-80") //fails due to ordering of attributes; review, possibly edit test
-	//runGeneralXslTest(t, "bug-81") //rounding error in XPath calculation; might be caused by CGO conversion
+	runGeneralXslTest(t, "bug-81") //rounding error in XPath calculation; might be caused by CGO conversion
 	//runGeneralXslTest(t, "bug-82") //whitespace interactions; possibly not honoring global preserve-space
 	runGeneralXslTest(t, "bug-83")
 	runGeneralXslTest(t, "bug-84")
-	//runGeneralXslTest(t, "bug-86") //getting some unnecessary duplication of namespaces declarations using copy-of
+	runGeneralXslTest(t, "bug-86") //getting some unnecessary duplication of namespaces declarations using copy-of
 	//runGeneralXslTest(t, "bug-87") //matching on namespace node
 	runGeneralXslTest(t, "bug-88")
 	runGeneralXslTest(t, "bug-89") //fails with stricter parser
@@ -230,7 +230,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-114")
 	//runGeneralXslTest(t, "bug-115") //exsl:node-set()
 	runGeneralXslTest(t, "bug-116")
-	//runGeneralXslTest(t, "bug-117")
+	runGeneralXslTest(t, "bug-117") //exsl declaration should not be in output
 	runGeneralXslTest(t, "bug-118") //copy-of
 	runGeneralXslTest(t, "bug-119")
 	//runGeneralXslTest(t, "bug-120") //xsl:sort with data-type; interaction with copy-of?
@@ -293,7 +293,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-178") //exslt:func
 	//runGeneralXslTest(t, "bug-179") // xsl:element/@namespace don't need to explicitly create namespace already in scope
 	//runGeneralXslTest(t, "bug-180") //expects no output
-	//runGeneralXslTest(t, "bug-181") //xsl:text missing from output
+	//runGeneralXslTest(t, "bug-181") //this appears to be template priority bug
 	//runGeneralXslTest(t, "bug-182") //text()[2] should match something
 	fmt.Println("passed", genRun, "tests")
 }
