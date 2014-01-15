@@ -515,6 +515,12 @@ func (i *XsltInstruction) copyToOutput(node xml.Node, context *ExecutionContext,
 			//TODO: search through namespaces in-scope
 			prefix, _ := context.Style.NamespaceMapping[ns]
 			r.SetNamespace(prefix, ns)
+		} else {
+			//may need to explicitly reset to empty namespace
+			def := context.DefaultNamespace(context.OutputNode)
+			if def != "" {
+				r.SetNamespace("", "")
+			}
 		}
 
 		//copy namespace declarations

@@ -216,7 +216,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-100") // libxslt:test extension element
 	runGeneralXslTest(t, "bug-101") // xsl:element with default namespace
 	//runGeneralXslTest(t, "bug-102") // imported xsl:attribute-set
-	//runGeneralXslTest(t, "bug-103") //copy-of needs to explicitly set empty namespace when needed
+	runGeneralXslTest(t, "bug-103") //copy-of needs to explicitly set empty namespace when needed
 	//runGeneralXslTest(t, "bug-104") //copy-of should preserve attr prefix if plausible
 	runGeneralXslTest(t, "bug-105")
 	runGeneralXslTest(t, "bug-106") //copy-of
@@ -231,7 +231,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-115") //exsl:node-set()
 	runGeneralXslTest(t, "bug-116")
 	//runGeneralXslTest(t, "bug-117")
-	//runGeneralXslTest(t, "bug-118") //copy-of
+	runGeneralXslTest(t, "bug-118") //copy-of
 	runGeneralXslTest(t, "bug-119")
 	//runGeneralXslTest(t, "bug-120") //xsl:sort with data-type; interaction with copy-of?
 	runGeneralXslTest(t, "bug-121")
