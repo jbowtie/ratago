@@ -288,8 +288,13 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		//i.copyToOutput(cur, context, false)
 		switch node.NodeType() {
 		case xml.XML_TEXT_NODE:
-			r := context.Output.CreateTextNode(node.Content())
-			context.OutputNode.AddChild(r)
+			if context.UseCDataSection(context.OutputNode) {
+				r := context.Output.CreateCDataNode(node.Content())
+				context.OutputNode.AddChild(r)
+			} else {
+				r := context.Output.CreateTextNode(node.Content())
+				context.OutputNode.AddChild(r)
+			}
 		case xml.XML_ATTRIBUTE_NODE:
 			aname := node.Name()
 			ahref := node.Namespace()
@@ -309,13 +314,13 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		case xml.XML_ELEMENT_NODE:
 			aname := node.Name()
 			r := context.Output.CreateElementNode(aname)
+			context.OutputNode.AddChild(r)
 			ns := node.Namespace()
 			if ns != "" {
 				//TODO: search through namespaces in-scope
 				prefix, _ := context.Style.NamespaceMapping[ns]
 				r.SetNamespace(prefix, ns)
 			}
-			context.OutputNode.AddChild(r)
 
 			//copy namespace declarations
 			for _, decl := range node.DeclaredNamespaces() {
@@ -504,13 +509,13 @@ func (i *XsltInstruction) copyToOutput(node xml.Node, context *ExecutionContext,
 	case xml.XML_ELEMENT_NODE:
 		aname := node.Name()
 		r := context.Output.CreateElementNode(aname)
+		context.OutputNode.AddChild(r)
 		ns := node.Namespace()
 		if ns != "" {
 			//TODO: search through namespaces in-scope
 			prefix, _ := context.Style.NamespaceMapping[ns]
 			r.SetNamespace(prefix, ns)
 		}
-		context.OutputNode.AddChild(r)
 
 		//copy namespace declarations
 		for _, decl := range node.DeclaredNamespaces() {

@@ -178,12 +178,10 @@ func (context *ExecutionContext) ShouldStrip(xmlNode xml.Node) bool {
 			return true
 		}
 		if strings.Contains(pat, ":") {
-			parts := strings.Split(pat, ":")
-			for uri, prefix := range context.Style.NamespaceMapping {
-				if uri == ns && prefix == parts[0] {
-					if parts[1] == elem || parts[1] == "*" {
-						return true
-					}
+			uri, name := context.ResolveQName(pat)
+			if uri == ns {
+				if name == elem || name == "*" {
+					return true
 				}
 			}
 		}
@@ -194,13 +192,32 @@ func (context *ExecutionContext) ShouldStrip(xmlNode xml.Node) bool {
 	return false
 }
 
+func (context *ExecutionContext) ResolveQName(qname string) (ns, name string) {
+	if !strings.Contains(qname, ":") {
+		//TODO: lookup default namespace
+		return "", name
+	}
+	parts := strings.Split(qname, ":")
+	for uri, prefix := range context.Style.NamespaceMapping {
+		if prefix == parts[0] {
+			return uri, parts[1]
+		}
+	}
+	return
+}
+
 func (context *ExecutionContext) UseCDataSection(node xml.Node) bool {
 	if node.NodeType() != xml.XML_ELEMENT_NODE {
 		return false
 	}
 	name := node.Name()
+	ns := node.Namespace()
 	for _, el := range context.Style.CDataElements {
-		if name == el {
+		if el == name {
+			return true
+		}
+		uri, elname := context.ResolveQName(el)
+		if uri == ns && name == elname {
 			return true
 		}
 	}

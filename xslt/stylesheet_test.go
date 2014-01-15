@@ -95,6 +95,8 @@ func TestXsltRECexample2(t *testing.T) {
 	runXslTest(t, "testdata/REC2/vrml.xsl", inputXml, "testdata/REC2/vrml.xml")
 }
 
+var genRun = 0
+
 //convenience function to fix up the paths before running a test
 func runGeneralXslTest(t *testing.T, xslFile string) bool {
 	//we change into the general directory to duplicate env of libxslt test run
@@ -106,6 +108,7 @@ func runGeneralXslTest(t *testing.T, xslFile string) bool {
 	xslf := fmt.Sprintf("%v.xsl", xslFile)
 	ii := fmt.Sprintf("../docs/%v.xml", xslFile)
 	oo := fmt.Sprintf("%v.out", xslFile)
+	genRun = genRun + 1
 	return runXslTest(t, xslf, ii, oo)
 }
 
@@ -239,7 +242,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-126") //tests for bugs in AVT parsing
 	runGeneralXslTest(t, "bug-127")
 	//runGeneralXslTest(t, "bug-128") //multiple keys with the same name; need to look at spec
-	//runGeneralXslTest(t, "bug-129") //cdata-section-elements
+	runGeneralXslTest(t, "bug-129") //cdata-section-elements
 	//runGeneralXslTest(t, "bug-130") //document('href') and import; different default namespace in imported stylesheet
 	//runGeneralXslTest(t, "bug-131") // attribute-set combine import defs
 	runGeneralXslTest(t, "bug-132")
@@ -292,6 +295,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-180") //expects no output
 	//runGeneralXslTest(t, "bug-181") //xsl:text missing from output
 	//runGeneralXslTest(t, "bug-182") //text()[2] should match something
+	fmt.Println("passed", genRun, "tests")
 }
 
 // sample usage for parse stylesheet
