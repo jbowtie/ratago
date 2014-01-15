@@ -115,8 +115,17 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		i.numbering(node, context)
 
 	case "text":
-		r := context.Output.CreateTextNode(i.Node.Content())
-		context.OutputNode.AddChild(r)
+		disableEscaping := i.Node.Attr("disable-output-escaping") == "yes"
+
+		content := i.Node.Content()
+		//don't bother creating a text node for an empty string
+		if content != "" {
+			r := context.Output.CreateTextNode(content)
+			if disableEscaping {
+				r.DisableOutputEscaping()
+			}
+			context.OutputNode.AddChild(r)
+		}
 
 	case "call-template":
 		name := i.Node.Attr("name")
