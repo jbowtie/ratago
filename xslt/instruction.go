@@ -369,6 +369,7 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 	case "for-each":
 		scope := i.Node.Attr("select")
 		e := xpath.Compile(scope)
+		context.RegisterXPathNamespaces(i.Node)
 		nodes, _ := context.EvalXPathAsNodeset(node, e)
 		if i.sorting != nil {
 			i.Sort(nodes, context)
