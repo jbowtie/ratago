@@ -241,11 +241,23 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 		content, _ := context.EvalXPathAsString(node, e)
 		//don't bother creating a text node for an empty string
 		if content != "" {
-			r := context.Output.CreateTextNode(content)
-			if disableEscaping {
-				r.DisableOutputEscaping()
+			if context.UseCDataSection(context.OutputNode) {
+				olddata := context.OutputNode.LastChild()
+				if olddata == nil || olddata.(*xml.CDataNode) == nil {
+					r := context.Output.CreateCDataNode(content)
+					context.OutputNode.AddChild(r)
+				} else {
+					r := context.Output.CreateCDataNode(olddata.Content() + content)
+					context.OutputNode.AddChild(r)
+					olddata.Remove()
+				}
+			} else {
+				r := context.Output.CreateTextNode(content)
+				if disableEscaping {
+					r.DisableOutputEscaping()
+				}
+				context.OutputNode.AddChild(r)
 			}
-			context.OutputNode.AddChild(r)
 		}
 	case "when":
 	case "if":

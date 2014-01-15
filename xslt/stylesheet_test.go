@@ -203,7 +203,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-87") //matching on namespace node
 	runGeneralXslTest(t, "bug-88")
 	runGeneralXslTest(t, "bug-89") //fails with stricter parser
-	//runGeneralXslTest(t, "bug-90")  // CDATA handling
+	runGeneralXslTest(t, "bug-90") // CDATA handling
 	runGeneralXslTest(t, "bug-91") // disable-output-escaping attribute
 	//runGeneralXslTest(t, "bug-92") //libxml2 doesn't output the xs namespace here; why not?
 	//runGeneralXslTest(t, "bug-93") // presence of xsl:output in imported stylesheets should cause effective merge
