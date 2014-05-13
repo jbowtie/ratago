@@ -8,6 +8,7 @@ import (
 )
 
 func (style *Stylesheet) RegisterXsltFunctions() {
+	// id and lang are built into libxml2, don't need to be registered
 	style.Functions["{}document"] = XsltDocumentFn
 	style.Functions["{}generate-id"] = XsltGenerateId
 	style.Functions["{}key"] = XsltKey
@@ -18,7 +19,8 @@ func (style *Stylesheet) RegisterXsltFunctions() {
 	style.Functions["{}function-available"] = XsltFunctionAvailable
 	//format-number - requires handling decimal-format
 
-	// id and lang are built into libxml2, don't need to be registered
+	style.Functions["{http://xmlsoft.org/XSLT/namespace}node-set"] = EXSLTnodeset
+	style.Functions["{http://exslt.org/common}node-set"] = EXSLTnodeset
 }
 
 type Key struct {
@@ -182,4 +184,30 @@ func argValToString(val interface{}) (out string) {
 		out = fmt.Sprintf("%v", v)
 	}
 	return
+}
+
+func EXSLTnodeset(context xpath.VariableScope, args []interface{}) interface{} {
+	if len(args) < 1 {
+		return nil
+	}
+	c := context.(*ExecutionContext)
+	nodes := args[0]
+	switch v := nodes.(type) {
+	case []unsafe.Pointer:
+		if len(v) == 0 {
+			return nil
+		}
+		fauxroot := c.Output.CreateElementNode("VARIABLE")
+		for _, node := range v {
+			n := xml.NewNode(node, nil)
+			fauxroot.AddChild(n)
+		}
+		out := xml.Nodeset{fauxroot}
+		return out.ToPointers()
+	default:
+		out := fmt.Sprintf("%v", v)
+		fmt.Println("invalid argument to exslt:nodeset", out)
+	}
+
+	return nodes
 }

@@ -224,11 +224,11 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-108")
 	runGeneralXslTest(t, "bug-109") // disable-output-escaping
 	runGeneralXslTest(t, "bug-110") //generate-id()
-	//runGeneralXslTest(t, "bug-111") //exsl:node-set()
-	//runGeneralXslTest(t, "bug-112") //exsl:node-set()
+	runGeneralXslTest(t, "bug-111") //exsl:node-set()
+	runGeneralXslTest(t, "bug-112") //exsl:node-set()
 	runGeneralXslTest(t, "bug-113") // stylesheet and parser in ISO-8859-1
 	runGeneralXslTest(t, "bug-114")
-	//runGeneralXslTest(t, "bug-115") //exsl:node-set()
+	runGeneralXslTest(t, "bug-115") //exsl:node-set()
 	runGeneralXslTest(t, "bug-116")
 	runGeneralXslTest(t, "bug-117") //exsl declaration should not be in output
 	runGeneralXslTest(t, "bug-118") //copy-of
