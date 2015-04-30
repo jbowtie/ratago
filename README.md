@@ -1,6 +1,8 @@
 ratago
 ======
 
+[![Build Status](https://travis-ci.org/jbowtie/ratago.svg?branch=master)](https://travis-ci.org/jbowtie/ratago)
+
 Ratago is a (mostly-compliant) implementation of an XSLT 1.0 processor written in Go and released under an MIT license.
 
 Currently it should be seen as experimental - it lacks full compliance with the spec. It has been run successfully on a number of scripts of moderate complexity as of the 0.4-pre release.
