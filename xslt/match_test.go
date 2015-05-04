@@ -1,6 +1,6 @@
 package xslt
 
-//import "github.com/moovweb/gokogiri/xml"
+//import "github.com/ThomsonReutersEikon/gokogiri/xml"
 //import "unicode/utf8"
 import "testing"
 

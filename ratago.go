@@ -4,8 +4,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/ThomsonReutersEikon/gokogiri/xml"
 	"github.com/jbowtie/ratago/xslt"
-	"github.com/moovweb/gokogiri/xml"
 	"os"
 )
 

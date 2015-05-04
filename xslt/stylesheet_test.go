@@ -2,7 +2,7 @@ package xslt
 
 import (
 	"fmt"
-	"github.com/moovweb/gokogiri/xml"
+	"github.com/ThomsonReutersEikon/gokogiri/xml"
 	"io/ioutil"
 	"os"
 	"path"

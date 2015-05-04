@@ -1,7 +1,7 @@
 package xslt
 
 import (
-	"github.com/moovweb/gokogiri/xml"
+	"github.com/ThomsonReutersEikon/gokogiri/xml"
 	"sort"
 )
 
