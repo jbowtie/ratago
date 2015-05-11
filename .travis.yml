@@ -8,7 +8,6 @@ before_install:
   - go get code.google.com/p/go.tools/cmd/cover
 
 script:
-  - go test -coverprofile=coverage.txt -covermode=atomic ./xslt
-
-after_success:
+  - go test -covermode=atomic ./...
+  - find .
   - bash <(curl -s https://codecov.io/bash)
