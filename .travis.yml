@@ -3,11 +3,11 @@ go:
   - 1.2
 
 before_install:
-  - go get github.com/onsi/gomega
-  - go get github.com/onsi/ginkgo
   - go get code.google.com/p/go.tools/cmd/cover
 
 script:
-  - go test -covermode=atomic ./...
-  - find .
+  - go test -coverprofile=xpath2_coverage.txt -covermode=atomic ./xpath2
+  - go test -coverprofile=xslt_coverage.txt -covermode=atomic ./xslt
+
+after_success:
   - bash <(curl -s https://codecov.io/bash)
