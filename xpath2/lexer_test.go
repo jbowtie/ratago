@@ -104,6 +104,17 @@ func TestPathWithQname(t *testing.T) {
 	compareToken(t, "]", TT_TERMINAL, tokens[13])
 }
 
+func TestFunctionCall(t *testing.T) {
+	tokens := Scan("normalize-string(../@test)")
+	compareToken(t, "normalize-string", TT_NCNAME, tokens[0])
+	compareToken(t, "(", TT_TERMINAL, tokens[1])
+	compareToken(t, "..", TT_TERMINAL, tokens[2])
+	compareToken(t, "/", TT_TERMINAL, tokens[3])
+	compareToken(t, "@", TT_TERMINAL, tokens[4])
+	compareToken(t, "test", TT_NCNAME, tokens[5])
+	compareToken(t, ")", TT_TERMINAL, tokens[6])
+}
+
 func TestDashSyntax(t *testing.T) {
 	//trailing dash is part of ncname
 	tokens := Scan("foo- bar")
