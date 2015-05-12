@@ -58,17 +58,50 @@ func TestCommentSyntax(t *testing.T) {
 
 	//_ = Scan("12(:xml:test and (:nested comment:):)0.5, a,b,c/xy//z,d 1.2e3 xml:test[1]")
 	//_ = Scan("x \"this is a \"\"test\"\"\" return 'ye old a''pos' z")
-	//_ = Scan(" a<b c<<d e<=f a>b c>>d e>=f")
 }
 
-func TestAngleBracketOperators(t *testing.T) {
-	tokens := Scan("a<b c<<d")
+func TestLeftAngleBracketOperators(t *testing.T) {
+	tokens := Scan("a<b c<<d e<=f")
 	compareToken(t, "a", TT_NCNAME, tokens[0])
 	compareToken(t, "<", TT_TERMINAL, tokens[1])
 	compareToken(t, "b", TT_NCNAME, tokens[2])
 	compareToken(t, "c", TT_NCNAME, tokens[3])
 	compareToken(t, "<<", TT_TERMINAL, tokens[4])
 	compareToken(t, "d", TT_NCNAME, tokens[5])
+	compareToken(t, "e", TT_NCNAME, tokens[6])
+	compareToken(t, "<=", TT_TERMINAL, tokens[7])
+	compareToken(t, "f", TT_NCNAME, tokens[8])
+}
+
+func TestRightAngleBracketOperators(t *testing.T) {
+	tokens := Scan("a>b c>>d e>=f")
+	compareToken(t, "a", TT_NCNAME, tokens[0])
+	compareToken(t, ">", TT_TERMINAL, tokens[1])
+	compareToken(t, "b", TT_NCNAME, tokens[2])
+	compareToken(t, "c", TT_NCNAME, tokens[3])
+	compareToken(t, ">>", TT_TERMINAL, tokens[4])
+	compareToken(t, "d", TT_NCNAME, tokens[5])
+	compareToken(t, "e", TT_NCNAME, tokens[6])
+	compareToken(t, ">=", TT_TERMINAL, tokens[7])
+	compareToken(t, "f", TT_NCNAME, tokens[8])
+}
+
+func TestPathWithQname(t *testing.T) {
+	tokens := Scan("c/xy//z/foo:bar[self::test:name='bar']")
+	compareToken(t, "c", TT_NCNAME, tokens[0])
+	compareToken(t, "/", TT_TERMINAL, tokens[1])
+	compareToken(t, "xy", TT_NCNAME, tokens[2])
+	compareToken(t, "//", TT_TERMINAL, tokens[3])
+	compareToken(t, "z", TT_NCNAME, tokens[4])
+	compareToken(t, "/", TT_TERMINAL, tokens[5])
+	compareToken(t, "foo:bar", TT_QNAME, tokens[6])
+	compareToken(t, "[", TT_TERMINAL, tokens[7])
+	compareToken(t, "self", TT_KEYWORD, tokens[8])
+	compareToken(t, "::", TT_TERMINAL, tokens[9])
+	compareToken(t, "test:name", TT_QNAME, tokens[10])
+	compareToken(t, "=", TT_TERMINAL, tokens[11])
+	compareToken(t, "'bar'", TT_STRING, tokens[12])
+	compareToken(t, "]", TT_TERMINAL, tokens[13])
 }
 
 func TestDashSyntax(t *testing.T) {
