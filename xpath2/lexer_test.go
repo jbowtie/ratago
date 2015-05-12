@@ -61,6 +61,16 @@ func TestCommentSyntax(t *testing.T) {
 	//_ = Scan(" a<b c<<d e<=f a>b c>>d e>=f")
 }
 
+func TestAngleBracketOperators(t *testing.T) {
+	tokens := Scan("a<b c<<d")
+	compareToken(t, "a", TT_NCNAME, tokens[0])
+	compareToken(t, "<", TT_TERMINAL, tokens[1])
+	compareToken(t, "b", TT_NCNAME, tokens[2])
+	compareToken(t, "c", TT_NCNAME, tokens[3])
+	compareToken(t, "<<", TT_TERMINAL, tokens[4])
+	compareToken(t, "d", TT_NCNAME, tokens[5])
+}
+
 func TestDashSyntax(t *testing.T) {
 	//trailing dash is part of ncname
 	tokens := Scan("foo- bar")
