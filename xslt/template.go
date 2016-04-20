@@ -163,7 +163,7 @@ func (e *LiteralResultElement) Apply(node xml.Node, context *ExecutionContext) {
 	}
 
 	attsets := ""
-	for _, attr := range e.Node.Attributes() {
+	for _, attr := range e.Node.AttributeList() {
 		//fmt.Println(attr.Namespace(), attr.Name(), attr.Content())
 		txt := attr.Content()
 		if strings.ContainsRune(txt, '{') {

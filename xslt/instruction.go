@@ -554,7 +554,7 @@ func (i *XsltInstruction) copyToOutput(node xml.Node, context *ExecutionContext,
 		context.OutputNode = r
 		if recursive {
 			//copy attributes
-			for _, attr := range node.Attributes() {
+			for _, attr := range node.AttributeList() {
 				i.copyToOutput(attr, context, recursive)
 			}
 			for cur := node.FirstChild(); cur != nil; cur = cur.NextSibling() {
