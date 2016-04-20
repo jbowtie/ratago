@@ -268,6 +268,9 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 			}
 		}
 	case "attribute-set":
+		for _, c := range i.Children {
+			c.Apply(node, context)
+		}
 		othersets := i.Node.Attr("use-attribute-sets")
 		if othersets != "" {
 			asets := strings.Fields(othersets)
@@ -277,9 +280,6 @@ func (i *XsltInstruction) Apply(node xml.Node, context *ExecutionContext) {
 					a.Apply(node, context)
 				}
 			}
-		}
-		for _, c := range i.Children {
-			c.Apply(node, context)
 		}
 	case "fallback":
 		for _, c := range i.Children {
