@@ -2,8 +2,8 @@ package xslt
 
 import (
 	"container/list"
-	"github.com/ThomsonReutersEikon/gokogiri/xml"
-	"github.com/ThomsonReutersEikon/gokogiri/xpath"
+	"github.com/jbowtie/gokogiri/xml"
+	"github.com/jbowtie/gokogiri/xpath"
 	"strconv"
 	"strings"
 	"unicode/utf8"
