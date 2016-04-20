@@ -1,11 +1,6 @@
 language: go
 go:
-  - 1.2
-  - 1.4
   - 1.6
-
-before_install:
-  - go get code.google.com/p/go.tools/cmd/cover
 
 script:
   - go test -coverprofile=xpath2_coverage.txt -covermode=atomic ./xpath2
