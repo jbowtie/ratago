@@ -2,7 +2,7 @@ ratago
 ======
 
 [![Build Status](https://travis-ci.org/jbowtie/ratago.svg?branch=master)](https://travis-ci.org/jbowtie/ratago)
-[![codecov.io](http://codecov.io/github/jbowtie/ratago/coverage.svg?branch=master)](http://codecov.io/github/jbowtie/ratago?branch=master)
+[![codecov](https://codecov.io/gh/jbowtie/ratago/branch/master/graph/badge.svg)](https://codecov.io/gh/jbowtie/ratago)
 
 Ratago is a (mostly-compliant) implementation of an XSLT 1.0 processor written in Go and released under an MIT license.
 
