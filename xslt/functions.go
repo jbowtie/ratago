@@ -129,7 +129,6 @@ func XsltGenerateId(context xpath.VariableScope, args []interface{}) interface{}
 	default:
 		return nil
 	}
-	return nil
 }
 
 // Implementation of unparsed-entity-uri() from XSLT spec

@@ -69,7 +69,7 @@ func (context *ExecutionContext) EvalXPath(xmlNode xml.Node, data interface{}) (
 
 // Register the namespaces in scope with libxml2 so that XPaths with namespaces
 // are resolved correctly.
-
+//
 // libxml2 probably already makes this info available
 func (context *ExecutionContext) RegisterXPathNamespaces(node xml.Node) (err error) {
 	seen := make(map[string]bool)
@@ -323,7 +323,7 @@ func (context *ExecutionContext) DefaultNamespace(node xml.Node) string {
 	return ""
 }
 
-// Propogate namespaces to the root of the output document
+// Propagate namespaces to the root of the output document
 func (context *ExecutionContext) DeclareStylesheetNamespacesIfRoot(node xml.Node) {
 	if context.OutputNode.NodeType() != xml.XML_DOCUMENT_NODE {
 		return

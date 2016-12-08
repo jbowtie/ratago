@@ -147,7 +147,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-22-")
 	runGeneralXslTest(t, "bug-23-")
 	runGeneralXslTest(t, "bug-24-")
-	runGeneralXslTest(t, "bug-25-") // encoding attr when UTF-8 explictly specified in doc
+	runGeneralXslTest(t, "bug-25-") // encoding attr when UTF-8 explicitly specified in doc
 	runGeneralXslTest(t, "bug-26-")
 	runGeneralXslTest(t, "bug-27-")
 	runGeneralXslTest(t, "bug-28-")

@@ -29,19 +29,19 @@ type romanEntry struct {
 }
 
 var romanNumeralMap = []romanEntry{
-	romanEntry{"M", 1000},
-	romanEntry{"CM", 900},
-	romanEntry{"D", 500},
-	romanEntry{"CD", 400},
-	romanEntry{"C", 100},
-	romanEntry{"XC", 90},
-	romanEntry{"L", 50},
-	romanEntry{"XL", 40},
-	romanEntry{"X", 10},
-	romanEntry{"IX", 9},
-	romanEntry{"V", 5},
-	romanEntry{"IV", 4},
-	romanEntry{"I", 1},
+	{"M", 1000},
+	{"CM", 900},
+	{"D", 500},
+	{"CD", 400},
+	{"C", 100},
+	{"XC", 90},
+	{"L", 50},
+	{"XL", 40},
+	{"X", 10},
+	{"IX", 9},
+	{"V", 5},
+	{"IV", 4},
+	{"I", 1},
 }
 
 type RomanNumber int

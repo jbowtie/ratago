@@ -322,7 +322,7 @@ func parseMatchPattern(s string) (steps []*MatchStep) {
 
 	// for now shortcut the common ROOT
 	if s == "/" {
-		steps = []*MatchStep{&MatchStep{Op: OP_ROOT, Value: s}, &MatchStep{Op: OP_END}}
+		steps = []*MatchStep{{Op: OP_ROOT, Value: s}, {Op: OP_END}}
 		return
 	}
 
