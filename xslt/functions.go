@@ -2,6 +2,7 @@ package xslt
 
 import (
 	"fmt"
+	"math"
 	"unsafe"
 
 	"github.com/jbowtie/gokogiri/xml"
@@ -23,6 +24,8 @@ func (style *Stylesheet) RegisterXsltFunctions() {
 	style.Functions["{http://xmlsoft.org/XSLT/namespace}node-set"] = EXSLTnodeset
 	style.Functions["{http://exslt.org/common}node-set"] = EXSLTnodeset
 	style.Functions["{http://exslt.org/math}constant"] = EXSLTmathconstant
+	style.Functions["{http://exslt.org/math}sin"] = EXSLTmathsin
+	style.Functions["{http://exslt.org/math}cos"] = EXSLTmathcos
 }
 
 type Key struct {
@@ -240,4 +243,20 @@ func EXSLTmathconstant(context xpath.VariableScope, args []interface{}) interfac
 	}
 
 	return 0
+}
+
+func EXSLTmathsin(context xpath.VariableScope, args []interface{}) interface{} {
+	if len(args) != 1 {
+		return nil
+	}
+
+	return math.Sin(args[0].(float64))
+}
+
+func EXSLTmathcos(context xpath.VariableScope, args []interface{}) interface{} {
+	if len(args) != 1 {
+		return nil
+	}
+
+	return math.Cos(args[0].(float64))
 }
