@@ -222,7 +222,7 @@ func EXSLTmathconstant(context xpath.VariableScope, args []interface{}) interfac
 		return 0
 	}
 
-	name := args[0]
+	name := args[0].(string)
 	precision := int(args[1].(float64))
 
 	switch name {
@@ -240,6 +240,9 @@ func EXSLTmathconstant(context xpath.VariableScope, args []interface{}) interfac
 		return fmt.Sprintf("%.*f", precision, 1.4426950408889634074)
 	case "SQRT1_2":
 		return fmt.Sprintf("%.*f", precision, 0.70710678118654752440)
+	default:
+		out := fmt.Sprintf("%v", name)
+		fmt.Println("unsupported constant in math:constant", out)
 	}
 
 	return 0
