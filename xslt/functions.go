@@ -26,6 +26,7 @@ func (style *Stylesheet) RegisterXsltFunctions() {
 	style.Functions["{http://exslt.org/math}constant"] = EXSLTmathconstant
 	style.Functions["{http://exslt.org/math}sin"] = EXSLTmathsin
 	style.Functions["{http://exslt.org/math}cos"] = EXSLTmathcos
+	style.Functions["{http://exslt.org/math}abs"] = EXSLTmathabs
 }
 
 type Key struct {
@@ -262,4 +263,12 @@ func EXSLTmathcos(context xpath.VariableScope, args []interface{}) interface{} {
 	}
 
 	return math.Cos(args[0].(float64))
+}
+
+func EXSLTmathabs(context xpath.VariableScope, args []interface{}) interface{} {
+	if len(args) != 1 {
+		return nil
+	}
+
+	return math.Abs(args[0].(float64))
 }
