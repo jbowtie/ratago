@@ -25,7 +25,10 @@ func runXslTest(t *testing.T, xslFile, inputXmlFile, outputXmlFile string) bool 
 	outData, _ := ioutil.ReadFile(outputXmlFile)
 	expected := string(outData)
 	stylesheet, _ := ParseStylesheet(style, xslFile)
-	testOptions := StylesheetOptions{false, nil}
+	testOptions := StylesheetOptions{false, map[string]interface{}{
+		"numberVar": 1,
+		"stringVar": "abcdef",
+	}}
 	output, _ := stylesheet.Process(input, testOptions)
 	if output != expected {
 		t.Error(xslFile, "failed")
@@ -299,6 +302,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-180") //expects no output
 	//runGeneralXslTest(t, "bug-181") //this appears to be template priority bug
 	//runGeneralXslTest(t, "bug-182") //text()[2] should match something
+	runGeneralXslTest(t, "bug-183") // pass parameters
 	fmt.Println("passed", genRun, "tests")
 }
 
