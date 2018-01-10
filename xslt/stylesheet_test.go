@@ -102,6 +102,11 @@ func TestXsltRECexample2(t *testing.T) {
 	runXslTest(t, "testdata/REC2/vrml.xsl", inputXml, "testdata/REC2/vrml.xml")
 }
 
+func TestXsltParameters(t *testing.T) {
+	inputXml := "testdata/parameters/data.xml"
+	runXslTest(t, "testdata/parameters/basic.xsl", inputXml, "testdata/parameters/basic.xml")
+}
+
 var genRun = 0
 
 //convenience function to fix up the paths before running a test
@@ -302,7 +307,6 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-180") //expects no output
 	//runGeneralXslTest(t, "bug-181") //this appears to be template priority bug
 	//runGeneralXslTest(t, "bug-182") //text()[2] should match something
-	runGeneralXslTest(t, "bug-183") // pass parameters
 	fmt.Println("passed", genRun, "tests")
 }
 
