@@ -6,8 +6,8 @@
 
 <xsl:template match="/">
   <body>
-	  <number><xsl value-of="$numberVal + 1" /></number>
-	  <text><xsl value-of="$stringVal" /></text>
+	  <number><xsl:value-of select="$numberVal + 1" /></number>
+	  <text><xsl:value-of select="$stringVal" /></text>
   </body>
 </xsl:template>
 
