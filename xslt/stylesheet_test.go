@@ -25,7 +25,10 @@ func runXslTest(t *testing.T, xslFile, inputXmlFile, outputXmlFile string) bool 
 	outData, _ := ioutil.ReadFile(outputXmlFile)
 	expected := string(outData)
 	stylesheet, _ := ParseStylesheet(style, xslFile)
-	testOptions := StylesheetOptions{false, nil}
+	testOptions := StylesheetOptions{false, map[string]interface{}{
+		"numberVar": 1,
+		"stringVar": "abcdef",
+	}}
 	output, _ := stylesheet.Process(input, testOptions)
 	if output != expected {
 		t.Error(xslFile, "failed")
@@ -97,6 +100,11 @@ func TestXsltRECexample2(t *testing.T) {
 	runXslTest(t, "testdata/REC2/html.xsl", inputXml, "testdata/REC2/html.xml")
 	runXslTest(t, "testdata/REC2/svg.xsl", inputXml, "testdata/REC2/svg.xml")
 	runXslTest(t, "testdata/REC2/vrml.xsl", inputXml, "testdata/REC2/vrml.xml")
+}
+
+func TestXsltParameters(t *testing.T) {
+	inputXml := "testdata/parameters/data.xml"
+	runXslTest(t, "testdata/parameters/basic.xsl", inputXml, "testdata/parameters/basic.xml")
 }
 
 var genRun = 0
