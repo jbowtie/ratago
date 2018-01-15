@@ -19,16 +19,12 @@ func TestNaive(t *testing.T) {
 }
 
 // Helper where actual checking occurs
-func runXslTest(t *testing.T, xslFile, inputXmlFile, outputXmlFile string) bool {
+func runXslTestWithOptions(t *testing.T, xslFile, inputXmlFile, outputXmlFile string, testOptions StylesheetOptions) bool {
 	style, _ := xml.ReadFile(xslFile, xml.StrictParseOption)
 	input, _ := xml.ReadFile(inputXmlFile, xml.StrictParseOption)
 	outData, _ := ioutil.ReadFile(outputXmlFile)
 	expected := string(outData)
 	stylesheet, _ := ParseStylesheet(style, xslFile)
-	testOptions := StylesheetOptions{false, map[string]interface{}{
-		"numberVar": 1,
-		"stringVar": "abcdef",
-	}}
 	output, _ := stylesheet.Process(input, testOptions)
 	if output != expected {
 		t.Error(xslFile, "failed")
@@ -39,6 +35,11 @@ func runXslTest(t *testing.T, xslFile, inputXmlFile, outputXmlFile string) bool 
 		return false
 	}
 	return true
+}
+
+func runXslTest(t *testing.T, xslFile, inputXmlFile, outputXmlFile string) bool {
+	testOptions := StylesheetOptions{false, nil}
+	return runXslTestWithOptions(t, xslFile, inputXmlFile, outputXmlFile, testOptions)
 }
 
 // check whether a file exists
@@ -102,9 +103,14 @@ func TestXsltRECexample2(t *testing.T) {
 	runXslTest(t, "testdata/REC2/vrml.xsl", inputXml, "testdata/REC2/vrml.xml")
 }
 
+// Test the handling of global parameters
 func TestXsltParameters(t *testing.T) {
+	testOptions := StylesheetOptions{false, map[string]interface{}{
+		"numberVal": 1.0,
+		"stringVal": "abcdef",
+	}}
 	inputXml := "testdata/parameters/data.xml"
-	runXslTest(t, "testdata/parameters/basic.xsl", inputXml, "testdata/parameters/basic.xml")
+	runXslTestWithOptions(t, "testdata/parameters/basic.xsl", inputXml, "testdata/parameters/basic.xml", testOptions)
 }
 
 var genRun = 0

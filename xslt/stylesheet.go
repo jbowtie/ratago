@@ -37,6 +37,7 @@ type Stylesheet struct {
 	StripSpace         []string
 	PreserveSpace      []string
 	CDataElements      []string
+	GlobalParameters   []string
 	includes           map[string]bool
 	Keys               map[string]*Key
 	OutputMethod       string //html, xml, text
@@ -182,9 +183,10 @@ func (style *Stylesheet) parseChildren(root xml.Node, fileuri string) (err error
 			continue
 		}
 
-		//TODO: this is cheating. Also note global params can have their
-		// value overwritten
 		if IsXsltName(cur, "param") {
+			name := cur.Attr("name")
+			// record that it's a global parameter - we'll check supplied options against this list
+			style.GlobalParameters = append(style.GlobalParameters, name)
 			style.RegisterGlobalVariable(cur)
 			continue
 		}
@@ -337,7 +339,19 @@ func (style *Stylesheet) Process(doc *xml.XmlDocument, options StylesheetOptions
 	for _, val := range style.Variables {
 		val.Apply(doc, context)
 	}
-	// set xpath context
+
+	// for each global parameter
+	for _, param := range style.GlobalParameters {
+		// was a parameter passed with this name?
+		gp_value, gp_ok := options.Parameters[param]
+		if gp_ok {
+			gp_var := style.Variables[param]
+			// replace value of style.Variables[key]
+			gp_var.Value = gp_value
+			fmt.Println("Existing", param, "set to", gp_value)
+		}
+	}
+
 	// process nodes
 	style.processNode(start, context, nil)
 
