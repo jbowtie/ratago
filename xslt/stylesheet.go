@@ -348,7 +348,7 @@ func (style *Stylesheet) Process(doc *xml.XmlDocument, options StylesheetOptions
 			gp_var := style.Variables[param]
 			// replace value of style.Variables[key]
 			gp_var.Value = gp_value
-			fmt.Println("Existing", param, "set to", gp_value)
+			// fmt.Println("Existing", param, "set to", gp_value)
 		}
 	}
 

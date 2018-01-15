@@ -180,7 +180,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-42-") //as 40 but for apply-templates
 	runGeneralXslTest(t, "bug-43-") //as 41 but for apply-templates
 	runGeneralXslTest(t, "bug-44-") // with-param
-	//runGeneralXslTest(t, "bug-45-") // ensure params/variables resolve in correct order
+	runGeneralXslTest(t, "bug-45-") // ensure params/variables resolve in correct order
 	runGeneralXslTest(t, "bug-46-")
 	runGeneralXslTest(t, "bug-47-")
 	runGeneralXslTest(t, "bug-48-")
@@ -202,7 +202,7 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-66") //current()
 	runGeneralXslTest(t, "bug-68")
 	runGeneralXslTest(t, "bug-69") // stylesheet and input in iso-8859-1
-	//runGeneralXslTest(t, "bug-70") // key() - nodeset as arg 2
+	runGeneralXslTest(t, "bug-70") // key() - nodeset as arg 2
 	//runGeneralXslTest(t, "bug-71") //only fails due to order of NS declarations; need to review spec on that
 	runGeneralXslTest(t, "bug-72") //variables declared in RVT
 	runGeneralXslTest(t, "bug-73")
@@ -225,12 +225,12 @@ func TestXsltGeneral(t *testing.T) {
 	runGeneralXslTest(t, "bug-91") // disable-output-escaping attribute
 	//runGeneralXslTest(t, "bug-92") //libxml2 doesn't output the xs namespace here; why not?
 	//runGeneralXslTest(t, "bug-93") // presence of xsl:output in imported stylesheets should cause effective merge
-	//runGeneralXslTest(t, "bug-94") //variable/param confusion
+	runGeneralXslTest(t, "bug-94") //variable/param confusion
 	//runGeneralXslTest(t, "bug-95") //format-number
 	runGeneralXslTest(t, "bug-96") //cdata-section-elements
 	runGeneralXslTest(t, "bug-97")
-	//runGeneralXslTest(t, "bug-98")
-	//runGeneralXslTest(t, "bug-99")
+	runGeneralXslTest(t, "bug-98")
+	//runGeneralXslTest(t, "bug-99") // expects multiple namespace declarations
 	//runGeneralXslTest(t, "bug-100") // libxslt:test extension element
 	runGeneralXslTest(t, "bug-101") // xsl:element with default namespace
 	//runGeneralXslTest(t, "bug-102") // imported xsl:attribute-set
@@ -265,7 +265,7 @@ func TestXsltGeneral(t *testing.T) {
 	//runGeneralXslTest(t, "bug-131") // attribute-set combine import defs
 	runGeneralXslTest(t, "bug-132")
 	//runGeneralXslTest(t, "bug-133") // interaction between key, generate-id?
-	//runGeneralXslTest(t, "bug-134") //key with literal string in use
+	//runGeneralXslTest(t, "bug-134") // xsl:key match "node()[self::sect]" should be same as match "sect" but is not; context issue??
 	//runGeneralXslTest(t, "bug-135") // same as 134
 	runGeneralXslTest(t, "bug-136")
 	//runGeneralXslTest(t, "bug-137") // EXSLT func
