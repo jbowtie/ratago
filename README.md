@@ -26,6 +26,13 @@ sudo ln -s /usr/local/opt/libxml2/include/libxml2/libxml /usr/local/include/libx
 GO111MODULE=on go get github.com/jbowtie/ratago
 ```
 
+Example Usage
+----
+
+```sh
+ratago -indent transform.xslt data.xml > result.xml
+```
+
 TODO
 ----
 
