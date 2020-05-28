@@ -1,2 +1,4 @@
 github.com/jbowtie/gokogiri v0.0.0-20190301021639-37f655d3078f h1:6UIvzqlGM38lOpKP380Wbl0kUyyjutcc7KJUaDM/U4o=
 github.com/jbowtie/gokogiri v0.0.0-20190301021639-37f655d3078f/go.mod h1:C3R3VzPq+DAwilxue7DiV6F2QL1rrQX0L56GyI+sBxM=
+github.com/jbowtie/kowhai v0.0.0-20150515033021-5b6ea3150fcb h1:8wfeZ02a90YG5dVqFbhBL3+L4Bfg89jvbmAfpzpNG+4=
+github.com/jbowtie/kowhai v0.0.0-20150515033021-5b6ea3150fcb/go.mod h1:z7wf9E1HyH6ayHf5Kq5tZaDLLs+3p0Eu9S7jBA3dYbY=
